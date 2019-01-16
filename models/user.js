@@ -37,6 +37,8 @@ const schema = new mongoose.Schema(
   }
 );
 
+schema.set('timestamps', true);
+
 schema.set('toJSON', {
   virtuals: true,
   transform: (doc, res) => {
