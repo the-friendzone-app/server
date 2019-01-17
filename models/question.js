@@ -1,7 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 
-const schema = new mongoose.Schema(
+const questionSchema = new mongoose.Schema(
   {
     question: {type: String},
     options: [
@@ -14,7 +14,7 @@ const schema = new mongoose.Schema(
   }
 );
 
-schema.set('toJSON', {
+questionSchema.set('toJSON', {
   virtuals: true,
   transform: (doc, res) =>{
     delete res._id;
@@ -23,4 +23,4 @@ schema.set('toJSON', {
   }
 });
 
-module.exports = mongoose.model('Question', schema);
+module.exports = mongoose.model('Question', questionSchema);

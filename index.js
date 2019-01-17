@@ -12,6 +12,10 @@ const localStrategy = require('./passport/localStrategy');
 const jwtStrategy = require('./passport/jwtStrategy');
 
 const authRouter = require('./routes/auth');
+// const communityRouter = require('./routes/community');
+const friendsRouter = require('./routes/friends');
+// const meetupsRouter = require('./routes/meetups')
+const questionsRouter = require('./routes/questions')
 const userRouter = require('./routes/user'); 
 
 const app = express();
@@ -33,8 +37,12 @@ app.use(express.json());
 passport.use(localStrategy); 
 passport.use(jwtStrategy); 
 
-app.use('/api/auth', authRouter);
-app.use('/api/users', userRouter);
+app.use('/auth', authRouter);
+// app.use ('/community', communityRouter);
+app.use('/friends', friendsRouter);
+// app.use('/meetups', meetupsRouter);
+app.use('/questions', questionsRouter);
+app.use('/users', userRouter);
 
 
 // Custom 404 Not Found Error Handler

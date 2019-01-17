@@ -2,16 +2,16 @@
 
 const mongoose = require('mongoose');
 
-const schema = new mongoose.Schema(
+const quizSchema = new mongoose.Schema(
   {
     category: {type: String, required: true},
     questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}]
   }
 );
 
-schema.set('timestamps', true);
+quizSchema.set('timestamps', true);
 
-schema.set('toJSON',{
+quizSchema.set('toJSON',{
   virtuals: true,
   transform: (doc, res) =>{
     delete res._id;
@@ -19,4 +19,4 @@ schema.set('toJSON',{
   }
 });
 
-module.exports = mongoose.model('Quiz', schema);
+module.exports = mongoose.model('Quiz', quizSchema);

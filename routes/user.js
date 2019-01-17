@@ -1,9 +1,9 @@
 'use strict';
 
 const express = require('express');
+const faker = require('faker');
 const User = require('../models/user');
-const { ValidateUser } = require('../_utils/userValidation');
-const { ValidationError } = require('../_utils/validationErrors');
+
 const router = express.Router();
 
 function validateNewUser(req, res, next) {
@@ -18,12 +18,12 @@ function validateNewUser(req, res, next) {
     err = new Error('Password is required');
     err.location = 'password';
     err.code = 400;
-  } else if (username.length < 1) {
-    err = new Error('Username must be at least one character long');
+  } else if (username.length < 5) {
+    err = new Error('Username must be at least 5 character long');
     err.location = 'password';
     err.code = 422;
-  } else if (password.length < 10 || password.length > 72) {
-    err = new Error('Password must be between 10 and 72 characters long');
+  } else if (password.length < 8 || password.length > 72) {
+    err = new Error('Password must be between 8 and 72 characters long');
     err.location = 'password';
     err.code = 422;
   } else if(username.trim() !== username) {
@@ -48,16 +48,14 @@ function validateNewUser(req, res, next) {
 // Post to register a new user
 router.post('/', (req, res, next) => {
   let ValidUser = new Promise((res, rej) => {
-    ValidateUser(req, res, next) ? res() : rej();
+    validateNewUser(req, res, next) ? res() : rej();
   });
 
   let {
     username,
     password,
-    selfTalker,
-    selfListener,
-    preferenceTalker,
-    preferenceListener
+    selfType,
+    preferenceType
 
   } = req.body;
   username = username.trim();
@@ -81,12 +79,10 @@ router.post('/', (req, res, next) => {
       return User.create({
         username,
         password: hash,
-        "profile.selfTalker": selfTalker,
-        "profile.selfListener": selfListener,
-        "profile.preferenceTalker": preferenceTalker,
-        "profile.preferenceListener": preferenceListener
-
-
+        // hashedUsername: (faker.commerce.productAdjective()+faker.random.word()+faker.random.number),
+        "profile.selfType": selfType,
+        "profile.preferenceType": preferenceType,
+        // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
       });
     })
     .then(user => {
@@ -95,17 +91,17 @@ router.post('/', (req, res, next) => {
         .location(`${req.baseUrl}/${user._id}`)
         .json(user);
     })
-    .catch((err) => {
-      if (err.code === 11000 && err.name === 'MongoError') {
-        // Username already exists
-        const err = new Error('Username already taken');
-        err.location = 'username';
-        err.code = 422;
-        err.reason = 'ValidationError';
+    // .catch((err) => {
+    //   if (err.code === 11000 && err.name === 'MongoError') {
+    //     // Username already exists
+    //     const err = new Error('Username already taken');
+    //     err.location = 'username';
+    //     err.code = 422;
+    //     err.reason = 'ValidationError';
 
-        return Promise.reject(err);
-      }
-    })
+    //     return Promise.reject(err);
+    //   }
+    // })
     .catch(next);
 });
 

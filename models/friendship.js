@@ -10,7 +10,7 @@ const friendshipSchema = new mongoose.Schema(
   }
 );
 
-schema.set('toJSON', {
+friendshipSchema.set('toJSON', {
   virtuals: true,
   transform: (doc, res) => {
     delete res.accepted;

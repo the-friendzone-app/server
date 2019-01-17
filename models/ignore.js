@@ -9,7 +9,7 @@ const ignoreSchema = new mongoose.Schema(
   }
 );
 
-schema.set('toJSON', {
+ignoreSchema.set('toJSON', {
   virtuals: true,
   transform: (doc, res) => {
     delete res.__v;
