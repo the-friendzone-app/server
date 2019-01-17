@@ -6,64 +6,59 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-function validateNewUser(req, res, next) {
-  const { username, password } = req.body;
+// function validateNewUser(req, res, next) {
+//   const { username, password, selfType, preferenceType } = req.body;
 
-  let err;
-  if (!username) {
-    err = new Error('Username is required');
-    err.location = 'username';
-    err.code = 400;
-  } else if (!password) {
-    err = new Error('Password is required');
-    err.location = 'password';
-    err.code = 400;
-  } else if (username.length < 5) {
-    err = new Error('Username must be at least 5 character long');
-    err.location = 'password';
-    err.code = 422;
-  } else if (password.length < 8 || password.length > 72) {
-    err = new Error('Password must be between 8 and 72 characters long');
-    err.location = 'password';
-    err.code = 422;
-  } else if(username.trim() !== username) {
-    err = new Error('Username must not have leading/trailing whitespace');
-    err.location = 'username';
-    err.code = 422;
-  } else if (password.trim() !== password) {
-    err = new Error('Password must not have leading/trailing whitespace');
-    err.location = 'password';
-    err.code = 422;
-  }
+//   let err;
+//   if (!username) {
+//     err = new Error('Username is required');
+//     err.location = 'username';
+//     err.code = 400;
+//   } else if (!password) {
+//     err = new Error('Password is required');
+//     err.location = 'password';
+//     err.code = 400;
+//   } else if (username.length < 5) {
+//     err = new Error('Username must be at least 5 character long');
+//     err.location = 'password';
+//     err.code = 422;
+//   } else if (password.length < 8 || password.length > 72) {
+//     err = new Error('Password must be between 8 and 72 characters long');
+//     err.location = 'password';
+//     err.code = 422;
+//   } else if(username.trim() !== username) {
+//     err = new Error('Username must not have leading/trailing whitespace');
+//     err.location = 'username';
+//     err.code = 422;
+//   } else if (password.trim() !== password) {
+//     err = new Error('Password must not have leading/trailing whitespace');
+//     err.location = 'password';
+//     err.code = 422;
+//   }
 
-  if (err) {
-    err.reason = 'ValidationError'; // For reduxForm
-    next(err);
-    return;
-  }
+//   if (err) {
+//     err.reason = 'ValidationError'; // For reduxForm
+//     next(err);
+//     return;
+//   }
 
-  next();
-}
+//   next();
+// }
 
 // Post to register a new user
 router.post('/', (req, res, next) => {
-  let ValidUser = new Promise((res, rej) => {
-    validateNewUser(req, res, next) ? res() : rej();
-  });
+  // let ValidUser = new Promise((res, rej) => {
+  //   validateNewUser(req, res, next) ? res() : rej();
+  // });
 
-  let {
-    username,
-    password,
-    selfType,
-    preferenceType
+  let { username, password, selfType, preferenceType}  = req.body;
 
-  } = req.body;
   username = username.trim();
-  ValidUser
-    .then(() => {
-      return User.find({ username })
-        .count();
-    })
+  // ValidUser
+  //   .then(() => {
+  //     return 
+  return User.find({ username })
+    .count()
     .then(count => {
       if (count > 0) {
         return Promise.reject({
@@ -102,7 +97,7 @@ router.post('/', (req, res, next) => {
     //     return Promise.reject(err);
     //   }
     // })
-    .catch(next);
+    .catch(err => console.log(err));
 });
 
 module.exports = router;
