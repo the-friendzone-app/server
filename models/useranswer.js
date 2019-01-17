@@ -5,7 +5,11 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema(
   {
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    answer: {type: String},
+    answer: {
+      text: {type:String},
+      pros: {type:String},
+      cons: {type:String}
+    },
     question: {type: mongoose.Schema.Types.ObjectId, ref: 'Question'}
   }
 );

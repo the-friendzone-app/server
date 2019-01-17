@@ -7,7 +7,11 @@ const schema = new mongoose.Schema(
     user:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     friendScore: {type: Number, default: 0},
     strikeScore: {type: Number, default: 0},
-    aggroScore: {type: Number, default: 0}
+    aggroScore: {type: Number, default: 0},
+    meetupCreateScore: {type: Number, default: 0},
+    meetupJoinScore: {type: Number, default: 0},
+    pollScore: {type: Number, default: 0},
+    communityScore: {type: Number, default: 0},
   }
 );
 
