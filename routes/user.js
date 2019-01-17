@@ -46,33 +46,14 @@ function validateNewUser(req, res, next) {
 }
 
 // Post to register a new user
-router.post('/', (req, res, next) => {
-  let ValidUser = new Promise((res, rej) => {
-    validateNewUser(req, res, next) ? res() : rej();
-  });
+router.post('/', validateNewUser, (req, res, next) => {
 
-  let {
-    username,
-    password,
-    selfType,
-    preferenceType
+  let { username, password, selfType, preferenceType}  = req.body;
 
-  } = req.body;
   username = username.trim();
-  ValidUser
+
+  return User.find({ username })
     .then(() => {
-      return User.find({ username })
-        .count();
-    })
-    .then(count => {
-      if (count > 0) {
-        return Promise.reject({
-          code: 422,
-          reason: 'ValidationError',
-          message: 'Username already taken :(',
-          location: 'username'
-        });
-      }
       return User.hashPassword(password);
     })
     .then(hash => {
@@ -85,24 +66,23 @@ router.post('/', (req, res, next) => {
         // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
       });
     })
-    .then(user => {
+    .then(user => { 
       return res
         .status(201)
         .location(`${req.baseUrl}/${user._id}`)
         .json(user);
     })
-    // .catch((err) => {
-    //   if (err.code === 11000 && err.name === 'MongoError') {
-    //     // Username already exists
-    //     const err = new Error('Username already taken');
-    //     err.location = 'username';
-    //     err.code = 422;
-    //     err.reason = 'ValidationError';
+    .catch((err) => {
+      if (err.code === 11000 && err.name === 'MongoError') {
+        // Username already exists
+        const error = new Error('Username already taken');
+        error.location = 'username';
+        error.code = 422;
+        error.reason = 'ValidationError';
 
-    //     return Promise.reject(err);
-    //   }
-    // })
-    .catch(next);
+        next(error);
+      }
+    });
 });
 
 module.exports = router;
