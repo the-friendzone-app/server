@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 
 const commentSchema = mongoose.Schema({
-  topicId: mongoose.Schema.ObjectId,
-  topic: { type: mongoose.Schema.ObjectId, ref: 'Topic' },
+  // topicId: mongoose.Schema.ObjectId,
+  // topic: { type: mongoose.Schema.ObjectId, ref: 'Topic' },
   communityId: mongoose.Schema.ObjectId,
   community: { type: mongoose.Schema.ObjectId, ref: 'Community' },
   userId: mongoose.Schema.ObjectId,
