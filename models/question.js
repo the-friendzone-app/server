@@ -4,8 +4,13 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema(
   {
     question: {type: String},
-    answers: [{type: Object}],
-    category: {type: String}
+    options: [
+      {
+        text: {type: String},
+        pros: {type:String},
+        cons: {type:String}
+      }
+    ]
   }
 );
 

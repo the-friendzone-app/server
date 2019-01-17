@@ -1,0 +1,112 @@
+'use strict';
+
+const express = require('express');
+const User = require('../models/user');
+const { ValidateUser } = require('../_utils/userValidation');
+const { ValidationError } = require('../_utils/validationErrors');
+const router = express.Router();
+
+function validateNewUser(req, res, next) {
+  const { username, password } = req.body;
+
+  let err;
+  if (!username) {
+    err = new Error('Username is required');
+    err.location = 'username';
+    err.code = 400;
+  } else if (!password) {
+    err = new Error('Password is required');
+    err.location = 'password';
+    err.code = 400;
+  } else if (username.length < 1) {
+    err = new Error('Username must be at least one character long');
+    err.location = 'password';
+    err.code = 422;
+  } else if (password.length < 10 || password.length > 72) {
+    err = new Error('Password must be between 10 and 72 characters long');
+    err.location = 'password';
+    err.code = 422;
+  } else if(username.trim() !== username) {
+    err = new Error('Username must not have leading/trailing whitespace');
+    err.location = 'username';
+    err.code = 422;
+  } else if (password.trim() !== password) {
+    err = new Error('Password must not have leading/trailing whitespace');
+    err.location = 'password';
+    err.code = 422;
+  }
+
+  if (err) {
+    err.reason = 'ValidationError'; // For reduxForm
+    next(err);
+    return;
+  }
+
+  next();
+}
+
+// Post to register a new user
+router.post('/', (req, res, next) => {
+  let ValidUser = new Promise((res, rej) => {
+    ValidateUser(req, res, next) ? res() : rej();
+  });
+
+  let {
+    username,
+    password,
+    selfTalker,
+    selfListener,
+    preferenceTalker,
+    preferenceListener
+
+  } = req.body;
+  username = username.trim();
+  ValidUser
+    .then(() => {
+      return User.find({ username })
+        .count();
+    })
+    .then(count => {
+      if (count > 0) {
+        return Promise.reject({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Username already taken :(',
+          location: 'username'
+        });
+      }
+      return User.hashPassword(password);
+    })
+    .then(hash => {
+      return User.create({
+        username,
+        password: hash,
+        "profile.selfTalker": selfTalker,
+        "profile.selfListener": selfListener,
+        "profile.preferenceTalker": preferenceTalker,
+        "profile.preferenceListener": preferenceListener
+
+
+      });
+    })
+    .then(user => {
+      return res
+        .status(201)
+        .location(`${req.baseUrl}/${user._id}`)
+        .json(user);
+    })
+    .catch((err) => {
+      if (err.code === 11000 && err.name === 'MongoError') {
+        // Username already exists
+        const err = new Error('Username already taken');
+        err.location = 'username';
+        err.code = 422;
+        err.reason = 'ValidationError';
+
+        return Promise.reject(err);
+      }
+    })
+    .catch(next);
+});
+
+module.exports = router;
