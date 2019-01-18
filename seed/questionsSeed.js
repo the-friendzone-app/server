@@ -83,7 +83,7 @@ const questions = [
                 cons: '4con of option number 3'
             }
         ],
-        category: 'basics'
+        category: 'mvp1'
     },
     {
         question: '5What would you do if your friend bought you an expensive gift',
@@ -104,7 +104,28 @@ const questions = [
                 cons: '5con of option number 3'
             }
         ],
-        category: 'basics'
+        category: 'mvp2'
+    },
+    {
+        question: '6What would you do if your friend told you they were gay',
+        options: [
+            {
+                text: '6option number 1',
+                pros: '6pro of option number 1',
+                cons: '6con of option number 1'
+            },
+            {
+                text: '6option number 2',
+                pros: '6pro of option number 2',
+                cons: '6con of option number 2'
+            },
+            {
+                text: '6option number 3',
+                pros: '6pro of option number 3',
+                cons: '6con of option number 3'
+            }
+        ],
+        category: 'mvp3'
     },
 ];
 
