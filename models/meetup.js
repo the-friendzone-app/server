@@ -10,7 +10,7 @@ const meetupSchema = new mongoose.Schema(
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    createdBy: { type: String, required: true },
   }
 );
 
