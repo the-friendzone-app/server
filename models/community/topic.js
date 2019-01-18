@@ -2,7 +2,11 @@
 const mongoose = require('mongoose');
 
 const topicSchema = mongoose.Schema({
-  topicName: String,
+  topicName: {type: String, required: true},
+  creatorUser: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
+  description: {type: String},
+  tags: [{type:String}],
+  comments: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Topic'}]
 });
 
 topicSchema.set('timestamps', true);

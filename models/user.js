@@ -34,6 +34,7 @@ userSchema.methods.validatePassword = function (pwd) {
   return bcrypt.compare(pwd, currentUser.password);
 };
 
+
 userSchema.statics.hashPassword = function (pwd) {
   return bcrypt.hash(pwd, 10);
 };
