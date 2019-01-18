@@ -60,10 +60,11 @@ router.post('/', validateNewUser, (req, res, next) => {
       return User.create({
         username,
         password: hash,
-        // hashedUsername: (faker.commerce.productAdjective()+faker.random.word()+faker.random.number),
+        // hashedUsername: (faker.commerce.productAdjective()+'-'+faker.random.word()+faker.random.number),
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
         // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
+      //if not changed to string 'completed' can't access full site
       });
     })
     .then(user => { 
