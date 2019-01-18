@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+// const faker = require('faker');
 
 const userSchema = new mongoose.Schema({
 
