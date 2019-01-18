@@ -30,13 +30,28 @@ userSchema.set('toJSON', {
   }
 });
 
+userSchema.methods.hashUsername = function () {
+let hashedname = faker.commerce.productAdjective()+'-'+faker.random.word()+faker.random.number();
+console.log(hashedname)  
+return hashedname;
+};
+
+userSchema.method.createVerificationCode = function () {
+  let code = '';
+for(let i = 0; i < 8; i++){
+  code += faker.random.alphaNumeric();
+  console.log(code)
+  return code;
+}
+};
 userSchema.methods.validatePassword = function (pwd) {
   const currentUser = this;
+
   return bcrypt.compare(pwd, currentUser.password);
 };
 
 userSchema.statics.hashPassword = function (pwd) {
-  return bcrypt.hash(pwd, 10);
+ return bcrypt.hash(pwd, 10);
 };
 
 module.exports = mongoose.model('User', userSchema);

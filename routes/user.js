@@ -52,22 +52,35 @@ router.post('/', validateNewUser, (req, res, next) => {
 
   username = username.trim();
 
-  return User.find({ username })
-    .then(() => {
-      return User.hashPassword(password);
-    })
-    .then(hash => {
-      return User.create({
+ 
+  let hashedPassword, hashedUsername, verificationCode;
+return User.find({ username })
+   .then(user => {
+     User.hashPassword(password);
+     return user;
+   })
+   .then(user => {
+     hasedUsername = User.hashUsername();
+     return user;
+   })
+   .then(user => {
+     verificationCode = User.createVerificationCode();
+     return {hashedPassword, hashedUsername, verificationCode};
+   })
+   .then(({hashedPassword, hashedUsername, verificationCode}) => {
+     return User.create({
+
         username,
-        password: hash,
-        // hashedUsername: (faker.commerce.productAdjective()+'-'+faker.random.word()+faker.random.number),
+        password: hashedPassword.hashedPassword,
+        hashedUsername,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
-        // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
-      //if not changed to string 'completed' can't access full site
+        userVerificationCode: verificationCode.verificationCode
+      // if not changed to string 'completed' can't access full site
       });
     })
     .then(user => { 
+    
       return res
         .status(201)
         .location(`${req.baseUrl}/${user._id}`)
