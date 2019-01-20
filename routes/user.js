@@ -26,7 +26,7 @@ function validateNewUser(req, res, next) {
     err = new Error('Password must be between 8 and 72 characters long');
     err.location = 'password';
     err.code = 422;
-  } else if(username.trim() !== username) {
+  } else if (username.trim() !== username) {
     err = new Error('Username must not have leading/trailing whitespace');
     err.location = 'username';
     err.code = 422;
@@ -47,40 +47,35 @@ function validateNewUser(req, res, next) {
 
 // Post to register a new user
 router.post('/', validateNewUser, (req, res, next) => {
+console.log('post attempting...')
+  // username = username.trim();
 
-  let { username, password, selfType, preferenceType}  = req.body;
-
-  username = username.trim();
-
- 
+  const { username, password, selfType, preferenceType } = req.body;
+  console.log(req.body)
   let hashedPassword, hashedUsername, verificationCode;
-return User.find({ username })
-   .then(user => {
-     User.hashPassword(password);
-     return user;
-   })
-   .then(user => {
-     hasedUsername = User.hashUsername();
-     return user;
-   })
-   .then(user => {
-     verificationCode = User.createVerificationCode();
-     return {hashedPassword, hashedUsername, verificationCode};
-   })
-   .then(({hashedPassword, hashedUsername, verificationCode}) => {
-     return User.create({
-
-        username,
-        password: hashedPassword.hashedPassword,
-        hashedUsername,
+  return User.hashPassword(password)
+    .then(_hashedPassword => {
+      hashedPassword = _hashedPassword;
+      console.log('hashedpassword', hashedPassword)
+      console.log('nextstep')
+      hashedUsername = User.hashUsername();
+      console.log('third step')
+      console.log('hashedusername', hashedUsername)
+      verificationCode = User.createVerificationCode();
+      console.log('verification', verificationCode)
+      return { hashedPassword, hashedUsername, verificationCode };
+    })
+    .then(({ hashedPassword, hashedUsername, verificationCode }) => {
+      return User.create({
+        username: username,
+        hashedUsername: hashedUsername,
+        password: hashedPassword,
+        verificationCode: verificationCode,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
-        userVerificationCode: verificationCode.verificationCode
-      // if not changed to string 'completed' can't access full site
-      });
+      })
     })
-    .then(user => { 
-    
+    .then(user => {
       return res
         .status(201)
         .location(`${req.baseUrl}/${user._id}`)
@@ -88,15 +83,16 @@ return User.find({ username })
     })
     .catch((err) => {
       if (err.code === 11000 && err.name === 'MongoError') {
-        // Username already exists
         const error = new Error('Username already taken');
         error.location = 'username';
         error.code = 422;
         error.reason = 'ValidationError';
-
+  
         next(error);
       }
     });
-});
+})
+  
+
 
 module.exports = router;

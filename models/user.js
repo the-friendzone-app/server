@@ -2,7 +2,7 @@
 
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-// const faker = require('faker');
+const faker = require('faker');
 
 const userSchema = new mongoose.Schema({
 
@@ -30,14 +30,20 @@ userSchema.set('toJSON', {
   }
 });
 
-userSchema.methods.hashUsername = function () {
-let hashedname = faker.commerce.productAdjective()+'-'+faker.random.word()+faker.random.number();
+
+
+
+userSchema.statics.hashUsername = function () {
+  let randomWords= ['Cat', 'Hotdog', 'Dragon', 'Fish', 'Tomato', 'Fire', 'Shrimp','Poodle','Glasses','Leaf','Key','Dog','Sandwich','Puppy','Teacup','Sunset','Orangutan','Guide','Electricity','Spoon','Bed','Pajamas','Mountain','Waterfall','Pirate','Sailor','Socks','Ninja','Assassin','Warrior','Druid','Viper','Genius','Banana','Grapefruit','Llama','Skeleton','Duckling','Wizard','Tiger','Lion','Bear','Crab','Rogue','Magician','Lizard','Racecar','Hacker','Winter','Omelette','Pterodactyl','Waffle','Astronaut','Dinosaur','Porcupine','Jaguar','Spaceship','Sloth','Midnight','Birthdaycake','Potion','Axolotl','Hawk','Spider','Grasshopper','Octopus','Dolphin','Thunder','Lightning','Blizzard','Donut']
+  let randomWord = randomWords[Math.floor(Math.random()*randomWords.length)];
+let hashedname = 
+faker.commerce.productAdjective()+'-'+randomWord+faker.random.number();
 console.log(hashedname)  
 return hashedname;
 };
 
-userSchema.method.createVerificationCode = function () {
-  let code = '';
+userSchema.statics.createVerificationCode = function () {
+  let code = ''
 for(let i = 0; i < 8; i++){
   code += faker.random.alphaNumeric();
   console.log(code)
