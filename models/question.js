@@ -9,7 +9,8 @@ const questionSchema = new mongoose.Schema({
       cons: { type: String }
     }
   ],
-  category: { type: String }
+  category: { type: String },
+  active: {type: Boolean}
 });
 
 questionSchema.set('toJSON', {

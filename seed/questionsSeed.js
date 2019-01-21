@@ -20,7 +20,8 @@ const questions = [
                 cons: '1con of option number 3'
             }
         ],
-        category: 'intro'
+        category: 'intro',
+        active: true
     },
     {
         question: '2What would you do if your friend hit you',
@@ -41,7 +42,8 @@ const questions = [
                 cons: '2con of option number 3'
             }
         ],
-        category: 'intro'
+        category: 'intro',
+        active: true
     },
     {
         question: '3What would you do if your friend stole from you',
@@ -62,7 +64,8 @@ const questions = [
                 cons: '3con of option number 3'
             }
         ],
-        category: 'intro'
+        category: 'intro',
+        active: true
     },
     {
         question: '4What would you do if your friend tried to kiss you',
@@ -83,7 +86,8 @@ const questions = [
                 cons: '4con of option number 3'
             }
         ],
-        category: 'mvp1'
+        category: 'mvp1',
+        active: true
     },
     {
         question: '5What would you do if your friend bought you an expensive gift',
@@ -104,7 +108,8 @@ const questions = [
                 cons: '5con of option number 3'
             }
         ],
-        category: 'mvp2'
+        category: 'mvp2',
+        active: true
     },
     {
         question: '6What would you do if your friend told you they were gay',
@@ -125,7 +130,30 @@ const questions = [
                 cons: '6con of option number 3'
             }
         ],
-        category: 'mvp3'
+        category: 'mvp3',
+        active: true
+    },
+    {
+        question: 'InactiveQuestion Test',
+        options: [
+            {
+                text: '7option number 1',
+                pros: '7pro of option number 1',
+                cons: '7con of option number 1'
+            },
+            {
+                text: '7option number 2',
+                pros: '7pro of option number 2',
+                cons: '7con of option number 2'
+            },
+            {
+                text: '7option number 3',
+                pros: '7pro of option number 3',
+                cons: '7con of option number 3'
+            }
+        ],
+        category: 'mvp4',
+        active: false
     },
 ];
 
