@@ -17,7 +17,7 @@ const jwtAuth = passport.authenticate('jwt', {
 router.use(jwtAuth);
 // Fetch Intro Quiz
 router.get('/intro-quiz', jwtAuth, (req,res,next)=>{
-    Questions.find({category: 'intro'})
+    Questions.find({category: 'intro', active: true})
     .then(results => {
         res.json(results);
     })
@@ -35,7 +35,7 @@ router.get('/personality-polls/:category', jwtAuth, (req,res,next)=> {
         next(err);
     })
 })
-
+//get all active poll questions
 router.get('/personality-polls/', jwtAuth, (req,res,next)=> {
     Questions.find({sctive: true})
     .then(results => {
