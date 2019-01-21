@@ -35,6 +35,16 @@ router.get('/personality-polls/:category', jwtAuth, (req,res,next)=> {
         next(err);
     })
 })
+
+router.get('/personality-polls/', jwtAuth, (req,res,next)=> {
+    Questions.find({sctive: true})
+    .then(results => {
+        res.json(results);
+    })
+    .catch(err => {
+        next(err);
+    })
+})
 // router.post('/personality-polls')
 
 //Post for new questions comes via seeding DB
