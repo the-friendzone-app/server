@@ -6,7 +6,7 @@ const { DATABASE_URL } = require('./config');
 
 const Community = require('./models/community/community');
 const Topic = require('./models/community/topic');
-const Comment = require('./models/community/comments');
+const Comments = require('./models/community/comments');
 
 const { communities, topics, comments} = require('./seed-data');
 
@@ -16,14 +16,14 @@ mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useCreateIndex : true })
     return Promise.all([
       Community.deleteMany(),
       Topic.deleteMany(),
-      Comment.deleteMany(),
+      Comments.deleteMany(),
     ]);
   })
   .then(() => {
     return Promise.all([
       Community.insertMany(communities),
       Topic.insertMany(topics),
-      Comment.insertMany(comments),
+      Comments.insertMany(comments),
     ]);
   })
   .then(results => {

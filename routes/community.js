@@ -18,5 +18,16 @@ router.get('/', jwtAuth, (req, res, next) => {
     .catch(err=>{
       console.log(err);
     });
+});
+
+router.get('/topic', jwtAuth, (req, res, next) => {
+  return Topic.find({})
+    .populate('comments')
+    .then(results =>{
+      return res.json(results);
+    })
+    .catch(err=>{
+      console.log(err);
+    });
 });  
 module.exports = router;
