@@ -34,11 +34,13 @@ userSchema.set('toJSON', {
 
 
 userSchema.statics.hashUsername = function () {
-  let randomWords= ['Cat', 'Hotdog', 'Dragon', 'Fish', 'Tomato', 'Fire', 'Shrimp','Poodle','Glasses','Leaf','Key','Dog','Sandwich','Puppy','Teacup','Sunset','Orangutan','Guide','Electricity','Spoon','Bed','Pajamas','Mountain','Waterfall','Pirate','Sailor','Socks','Ninja','Assassin','Warrior','Druid','Viper','Genius','Banana','Grapefruit','Llama','Skeleton','Duckling','Wizard','Tiger','Lion','Bear','Crab','Rogue','Magician','Lizard','Racecar','Hacker','Winter','Omelette','Pterodactyl','Waffle','Astronaut','Dinosaur','Porcupine','Jaguar','Spaceship','Sloth','Midnight','Birthdaycake','Potion','Axolotl','Hawk','Spider','Grasshopper','Octopus','Dolphin','Thunder','Lightning','Blizzard','Donut']
+  let randomAdjectives= ['Awesome','Futuristic','Happy','Evil','Sleepy','Wild','Sneaky','Cute','Chibi','Kawaii','Giant','Tiny','Super','Practical','Little','Silent','Smoky','Opalescent','Dark','Sparkling','Tasty','Secret','Misty','Shiny','Rare','Special','Friendly','Perfect','Wonderful','Incredible','Amazing','Ethereal','Clever','Phantom','Sophisticated','Intelligent','Super','Blue','Red','Green','Yellow','Purple','Pink','Orange','Smart']
+  let randomAdjective =randomAdjectives[Math.floor(Math.random()*randomAdjectives.length)];
+  let randomWords= ['Cat', 'Hotdog', 'Dragon', 'Fish', 'Tomato', 'Fire', 'Shrimp','Poodle','Glasses','Leaf','Key','Dog','Sandwich','Puppy','Teacup','Sunset','Orangutan','Guide','Electricity','Spoon','Bed','Pajamas','Mountain','Waterfall','Pirate','Sailor','Socks','Ninja','Assassin','Warrior','Druid','Viper','Genius','Banana','Grapefruit','Llama','Skeleton','Duckling','Wizard','Tiger','Lion','Bear','Crab','Rogue','Magician','Detective','Lizard','Racecar','Hacker','Winter','Omelette','Pterodactyl','Waffle','Astronaut','Dinosaur','Porcupine','Jaguar','Spaceship','Sloth','Midnight','Birthdaycake','Potion','Axolotl','Hawk','Spider','Grasshopper','Octopus','Dolphin','Thunder','Lightning','Blizzard','Donut','Volcano','Captain','Meteor','Swordfish','Crumpet']
   let randomWord = randomWords[Math.floor(Math.random()*randomWords.length)];
 let hashedname = 
-faker.commerce.productAdjective()+'-'+randomWord+faker.random.number();
-console.log(hashedname)  
+randomAdjective+'-'+randomWord+faker.random.number();
+
 return hashedname;
 };
 
@@ -46,9 +48,10 @@ userSchema.statics.createVerificationCode = function () {
   let code = ''
 for(let i = 0; i < 8; i++){
   code += faker.random.alphaNumeric();
-  console.log(code)
-  return code;
+
 }
+  return code;
+
 };
 userSchema.methods.validatePassword = function (pwd) {
   const currentUser = this;

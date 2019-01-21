@@ -5,7 +5,7 @@ require('dotenv').config();
 module.exports = {
   PORT: process.env.PORT || 8080,
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
-  DATABASE_URL: process.env.DATABASE_URL || 'mongodb://dev:devdev1234567890@ds161804.mlab.com:61804/friendzone-test',
+  DATABASE_URL: process.env.DATABASE_URL || 'mongodb+srv://devdev:dev1234567890@friendzone-test-zgr8s.mongodb.net/test?retryWrites=true',
   //   TEST_DATABASE_URL:
   //         process.env.TEST_DATABASE_URL ||
   //         'mongodb://localhost/thinkful-backend-test',
