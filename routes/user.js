@@ -70,7 +70,7 @@ console.log('post attempting...')
         username: username,
         hashedUsername: hashedUsername,
         password: hashedPassword,
-        verificationCode: verificationCode,
+        userVerificationCode: verificationCode,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
       })
