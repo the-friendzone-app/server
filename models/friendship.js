@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 const friendshipSchema = new mongoose.Schema(
   {
-    user_id1: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    user_id2: { type: mongoose.Schema.Types.ObjectId , ref: 'User' },
+    user_id1: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    user_id2: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     accepted: { type: Boolean, default: false },
   }
 );

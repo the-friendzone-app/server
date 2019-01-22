@@ -9,13 +9,18 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   hashedUsername: { type: String },
   password: { type: String, required: true },
-  userVerificationCode: { type: String},
+  userVerificationCode: { type: String },
   verified: { type: Boolean, default: false },
   introQuizCompleted: { type: Boolean, default: false },
   profile: {
     selfType: { type: String },
     preferenceType: { type: String },
-  }
+  },
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  friended: [{
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }
+  }]
 });
 
 userSchema.set('toJSON', {

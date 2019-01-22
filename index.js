@@ -17,8 +17,10 @@ const communityRouter = require('./routes/community');
 const friendsRouter = require('./routes/friends');
 const meetupsRouter = require('./routes/meetups');
 const questionsRouter = require('./routes/questions');
+const messagesRouter = require('./routes/messages');
 const userRouter = require('./routes/user'); 
 const meetupAttendenceRouter = require('./routes/meetup-attendence');
+
 
 const app = express();
 
@@ -46,7 +48,9 @@ app.use('/friends', friendsRouter);
 app.use('/meetups', meetupsRouter);
 app.use('/questions', questionsRouter);
 app.use('/users', userRouter);
+app.use('/messages', messagesRouter);
 app.use('/meetup-attendence', meetupAttendenceRouter);
+
 
 // Custom 404 Not Found Error Handler
 app.use((req, res, next) => {
@@ -81,9 +85,11 @@ function runServer(port = PORT) {
   //getting info we recieved from client (author and mesage) and sending it to everyone else
   io.on('connection', (socket) => {
     // console.log(socket.id);
-
-    socket.on('SEND_MESSAGE', function (data) {
-      io.emit('RECEIVE_MESSAGE', data);
+    socket.on('subscribe', chat => {
+      socket.join(chat);
+    });
+    socket.on('CHAT', function (data) {
+      io.sockets.in(data.room).emit('CHAT', data);
     });
   });
 }

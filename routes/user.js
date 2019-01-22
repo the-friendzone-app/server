@@ -73,7 +73,10 @@ console.log('post attempting...')
         userVerificationCode: verificationCode,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
-      })
+
+        // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
+        //if not changed to string 'completed' can't access full site
+      });
     })
     .then(user => {
       return res
@@ -91,7 +94,16 @@ console.log('post attempting...')
         next(error);
       }
     });
-})
+});
+router.get('/:id', (req, res) => {
+  let { id } = req.params;
+
+  return User.findById(id).then(user =>
+    res.json({
+      username: user.username
+    })
+  );
+});
   
 
 
