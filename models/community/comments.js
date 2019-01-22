@@ -2,14 +2,12 @@
 const mongoose = require('mongoose');
 
 const commentSchema = mongoose.Schema({
-  // topicId: mongoose.Schema.ObjectId,
-  // topic: { type: mongoose.Schema.ObjectId, ref: 'Topic' },
-  communityId: mongoose.Schema.ObjectId,
-  community: { type: mongoose.Schema.ObjectId, ref: 'Community' },
-  userId: mongoose.Schema.ObjectId,
-  user: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  date: Date,
-  content: String,
+  topic: { type:  mongoose.Schema.Types.ObjectId, ref: 'Topic' },
+  community: { type:  mongoose.Schema.Types.ObjectId, ref: 'Community' },
+  user: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
+  comment: {type: String, required: true}
 });
 
-module.exports = mongoose.model('Comment', commentSchema);
+commentSchema.set('timestamps', true);
+
+module.exports = mongoose.model('Thread', commentSchema);
