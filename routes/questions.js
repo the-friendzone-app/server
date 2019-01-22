@@ -27,7 +27,7 @@ router.get('/intro-quiz', jwtAuth, (req,res,next)=>{
 })
 //Fetch Dynamic personality-poll categories
 router.get('/personality-polls/:category', jwtAuth, (req,res,next)=> {
-    Questions.find({category: req.params.category})
+    Questions.findOne({category: req.params.category})
     .then(results => {
         res.json(results);
     })
@@ -36,8 +36,8 @@ router.get('/personality-polls/:category', jwtAuth, (req,res,next)=> {
     })
 })
 //get all active poll questions
-router.get('/personality-polls/', jwtAuth, (req,res,next)=> {
-    Questions.find({sctive: true})
+router.get('/personality-polls', jwtAuth, (req,res,next)=> {
+    Questions.find({active: true})
     .then(results => {
         res.json(results);
     })

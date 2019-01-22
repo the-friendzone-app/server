@@ -21,7 +21,7 @@ const questions = [
             }
         ],
         category: 'intro',
-        active: true
+      
     },
     {
         question: '2What would you do if your friend hit you',
@@ -43,7 +43,7 @@ const questions = [
             }
         ],
         category: 'intro',
-        active: true
+       
     },
     {
         question: '3What would you do if your friend stole from you',
@@ -65,7 +65,7 @@ const questions = [
             }
         ],
         category: 'intro',
-        active: true
+        
     },
     {
         question: '4What would you do if your friend tried to kiss you',
