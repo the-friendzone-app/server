@@ -18,7 +18,7 @@ const friendsRouter = require('./routes/friends');
 const meetupsRouter = require('./routes/meetups');
 const questionsRouter = require('./routes/questions');
 const userRouter = require('./routes/user'); 
-
+const meetupAttendenceRouter = require('./routes/meetup-attendence');
 
 const app = express();
 
@@ -46,7 +46,7 @@ app.use('/friends', friendsRouter);
 app.use('/meetups', meetupsRouter);
 app.use('/questions', questionsRouter);
 app.use('/users', userRouter);
-
+app.use('/meetup-attendence', meetupAttendenceRouter);
 
 // Custom 404 Not Found Error Handler
 app.use((req, res, next) => {
