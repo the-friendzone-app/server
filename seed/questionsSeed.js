@@ -68,29 +68,40 @@ const questions = [
         
     },
     {
-        question: '4What would you do if your friend tried to kiss you',
+        question: 'What would you do if your friend stole from you?',
         options: [
             {
-                text: '4option number 1',
+                text: 'I\'d confront them about it',
                 pros: '4pro of option number 1',
                 cons: '4con of option number 1'
             },
             {
-                text: '4option number 2',
+                text: 'I\'d plan a time to steal from them to make it even',
                 pros: '4pro of option number 2',
                 cons: '4con of option number 2'
             },
             {
-                text: '4option number 3',
+                text: 'I\'d cut them out of my life completely.',
                 pros: '4pro of option number 3',
                 cons: '4con of option number 3'
-            }
+            },
+            {
+                text: 'I would call the Police',
+                pros: '4pro of option number 3',
+                cons: '4con of option number 3'
+            },
+            {
+                text: 'I would put them on blast on social media',
+                pros: '4pro of option number 3',
+                cons: '4con of option number 3'
+            },
+           
         ],
         category: 'mvp1',
         active: true
     },
     {
-        question: '5What would you do if your friend bought you an expensive gift',
+        question: 'What would you do if you and your friend had plans, and the canceled on you last minute?',
         options: [
             {
                 text: '5option number 1',
@@ -112,7 +123,7 @@ const questions = [
         active: true
     },
     {
-        question: '6What would you do if your friend told you they were gay',
+        question: 'What would you do if your friend told you they were depressed?',
         options: [
             {
                 text: '6option number 1',
