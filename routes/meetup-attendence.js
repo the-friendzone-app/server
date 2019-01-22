@@ -3,7 +3,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const Meetup = require('../models/meetup');
+const MeetupAttendence = require('../models/meetup-attendence');
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: tr
 router.use(jwtAuth);
 
 router.get('/', jwtAuth, (req, res, next) => {
-  Meetup.find()
+  MeetupAttendence.find()
     .then(results => {
       res.json(results);
     })
@@ -19,10 +19,10 @@ router.get('/', jwtAuth, (req, res, next) => {
 });
 
 router.post('/', jwtAuth, (req, res, next)=> {
-  let { name, location, description, startTime, endTime, createdBy } = req.body;
-  const newMeetup = { name, location, description, startTime, endTime, createdBy };
+  let { username, meetupId } = req.body;
+  const newMeetupAttendence = { username, meetupId };
   
-  Meetup.create(newMeetup)
+  MeetupAttendence.create(newMeetupAttendence)
     .then(result => {
       res.location(`${req.baseUrl}/${result.id}`).status(201).json(result);
     })
