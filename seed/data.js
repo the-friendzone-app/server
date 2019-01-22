@@ -79,8 +79,8 @@ const chat = [
     'friended': ['333333333333333333333301', '333333333333333333333302'],
     'messages': [
       {
-        'room': '433333333333333333333302',
-        'handle': 'Clever-Dolphin84559',
+        'room': '433333333333333333333301',
+        'handle': 'Tiny-Socks70004',
         'message': 'Hi Hello how are you?'
       }
     ]

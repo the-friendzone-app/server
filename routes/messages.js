@@ -29,15 +29,15 @@ router.get('/:id', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   // console.log(req.body);
   const userId = req.user._id;
-  console.log('USER ID', userId);
+  // console.log('USER ID', userId);
   const { id } = req.params;
   const { messages } = req.body;
   // console.log(messages);
   Chat.findOne({ _id: id })
     .then((chat) => {
-      console.log('chat', chat);
-      console.log('chat friended', chat.friended);
-      console.log('USER ID', userId);
+      // console.log('chat', chat);
+      // console.log('chat friended', chat.friended);
+      // console.log('USER ID', userId);
       if (chat.friended.find(user => user.toString() === userId)) {
         chat.friended.find(user => user.toString() === userId);
         return Chat.findOneAndUpdate({ _id: id }, { messages }, { new: true });
