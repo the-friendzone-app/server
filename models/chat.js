@@ -7,8 +7,9 @@ const ChatSchema = mongoose.Schema({
   friended: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   messages: [
     {
-      _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      message: { type: String }
+      room: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },
+      message: { type: String },
+      handle: String
     }
   ]
 });

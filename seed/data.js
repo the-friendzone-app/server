@@ -79,7 +79,8 @@ const chat = [
     'friended': '333333333333333333333302',
     'messages': [
       {
-        '_id': '333333333333333333333301',
+        'room': '433333333333333333333301',
+        'handle': 'samwise',
         'message': 'Hi Hello how are you?'
       }
     ]
@@ -89,7 +90,8 @@ const chat = [
     'friended': '333333333333333333333301',
     'messages': [
       {
-        '_id': '333333333333333333333302',
+        'room': '433333333333333333333302',
+        'handle': 'frodo',
         'message': 'Hi Hello how are you?'
       }
     ]
@@ -99,7 +101,8 @@ const chat = [
     'friended': '333333333333333333333303',
     'messages': [
       {
-        '_id': '333333333333333333333302',
+        'room': '433333333333333333333303',
+        'handle': 'frodo',
         'message': 'Hi Hello how are you?'
       }
     ]
@@ -109,7 +112,8 @@ const chat = [
     'friended': '333333333333333333333302',
     'messages': [
       {
-        '_id': '333333333333333333333303',
+        'room': '433333333333333333333304',
+        'handle': 'gollum',
         'message': 'Hi Hello how are you?'
       }
     ]
