@@ -17,7 +17,7 @@ const authRouter = require('./routes/auth');
 const friendsRouter = require('./routes/friends');
 const meetupsRouter = require('./routes/meetups');
 const questionsRouter = require('./routes/questions');
-const userRouter = require('./routes/user'); 
+const userRouter = require('./routes/user');
 
 
 const app = express();
@@ -81,9 +81,11 @@ function runServer(port = PORT) {
   //getting info we recieved from client (author and mesage) and sending it to everyone else
   io.on('connection', (socket) => {
     // console.log(socket.id);
-
-    socket.on('SEND_MESSAGE', function (data) {
-      io.emit('RECEIVE_MESSAGE', data);
+    socket.on('subscribe', chat => {
+      socket.join(chat);
+    });
+    socket.on('CHAT', function (data) {
+      io.sockets.in(data.room).emit('CHAT', data);
     });
   });
 }

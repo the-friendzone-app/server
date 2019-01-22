@@ -26,7 +26,7 @@ function validateNewUser(req, res, next) {
     err = new Error('Password must be between 8 and 72 characters long');
     err.location = 'password';
     err.code = 422;
-  } else if(username.trim() !== username) {
+  } else if (username.trim() !== username) {
     err = new Error('Username must not have leading/trailing whitespace');
     err.location = 'username';
     err.code = 422;
@@ -48,7 +48,7 @@ function validateNewUser(req, res, next) {
 // Post to register a new user
 router.post('/', validateNewUser, (req, res, next) => {
 
-  let { username, password, selfType, preferenceType}  = req.body;
+  let { username, password, selfType, preferenceType } = req.body;
 
   username = username.trim();
 
@@ -64,10 +64,10 @@ router.post('/', validateNewUser, (req, res, next) => {
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
         // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
-      //if not changed to string 'completed' can't access full site
+        //if not changed to string 'completed' can't access full site
       });
     })
-    .then(user => { 
+    .then(user => {
       return res
         .status(201)
         .location(`${req.baseUrl}/${user._id}`)
@@ -84,6 +84,15 @@ router.post('/', validateNewUser, (req, res, next) => {
         next(error);
       }
     });
+});
+router.get('/:id', (req, res) => {
+  let { id } = req.params;
+
+  return User.findById(id).then(user =>
+    res.json({
+      username: user.username
+    })
+  );
 });
 
 module.exports = router;
