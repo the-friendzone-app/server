@@ -33,9 +33,31 @@ router.post('/topic', jwtAuth, (req, res, next) => {
     });
 });
 
+router.post('/topic/post', jwtAuth, (req, res, next) => {
+  const newTopic = {
+    community: req.body.community, 
+    topicName: req.body.topicName,
+    description: req.body.description,
+    creator: req.user._id,
+    comments:[],
+    tags:[]
+  };
+  
+  let topicId;
+  return Topic.create(newTopic)
+    .then(result => {
+      topicId = result.id;
+      return Community.findOneAndUpdate({_id: req.body.community}, {'$push': {'topics':  topicId}})
+        .then((result) =>{
+          return res.json('IT HAS BEEN COMPLETED!');
+        });
+    })
+  
+    .catch(err => next(err));
+}); 
+
 router.post('/comments', jwtAuth, (req, res, next) => {
   const { topicId } = req.body;
-  console.log(topicId);
   return Thread.find({topic: topicId})
     .populate('user')
     .then(results =>{
