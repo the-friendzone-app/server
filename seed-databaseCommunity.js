@@ -8,7 +8,7 @@ const Community = require('./models/community/community');
 const Topic = require('./models/community/topic');
 const Comments = require('./models/community/comments');
 
-const { communities, topics, comments} = require('./seed-data');
+const { communities, topics, comments} = require('./seed-dataCommunity');
 
 console.log(`Connecting to mongodb at ${DATABASE_URL}`);
 mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useCreateIndex : true })
