@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
 userSchema.set('toJSON', {
   virtual: true,
   transform: (doc, result) => {
-    delete result._id;
     delete result.__v;
     delete result.password;
     delete result.userVerificationCode;

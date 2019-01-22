@@ -4,7 +4,8 @@ const express = require('express');
 const passport = require('passport');
 const Community = require('../models/community/community');
 const Topic = require('../models/community/topic');
-const Comment = require('../models/community/comments');
+const Thread = require('../models/community/comments');
+const User = require('../models/user');
 
 const router = express.Router();
 
@@ -16,18 +17,55 @@ router.get('/', jwtAuth, (req, res, next) => {
       return res.json(results);
     })
     .catch(err=>{
-      console.log(err);
+      next(err);
     });
 });
 
-router.get('/topic', jwtAuth, (req, res, next) => {
-  return Topic.find({})
-    .populate('comments')
+router.post('/topic', jwtAuth, (req, res, next) => {
+  const { communityId } = req.body;
+  return Topic.find({community: communityId })
+    .populate('creator')
     .then(results =>{
       return res.json(results);
     })
     .catch(err=>{
-      console.log(err);
+      next(err);
     });
+});
+
+router.post('/comments', jwtAuth, (req, res, next) => {
+  const { topicId } = req.body;
+  console.log(topicId);
+  return Thread.find({topic: topicId})
+    .populate('user')
+    .then(results =>{
+      return res.json(results);
+    })
+    .catch(err=>{
+      next(err);
+    });
+});
+
+router.post('/comments/post', jwtAuth, (req, res, next) => {
+  const newComment = {
+    community: req.body.community, 
+    topic: req.body.topic, 
+    comment: req.body.comment,
+    user: req.user._id 
+  };
+  
+  let commentId;
+  return Thread.create(newComment)
+    .then(result => {
+      commentId = result.id;
+      return Topic.findOneAndUpdate({_id: req.body.topic}, {'$push': {'comments':  commentId}})
+        .then((result) =>{
+          return res.json('IT HAS BEEN COMPLETED!');
+        });
+    })
+  
+    .catch(err => next(err));
 });  
+
+
 module.exports = router;

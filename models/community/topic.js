@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 
 const topicSchema = mongoose.Schema({
   topicName: {type: String, required: true},
-  creatorUser: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
+  creator: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
   description: {type: String},
   tags: [{type:String}],
-  comments: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Topic'}]
+  comments: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Thread'}],
+  community: { type:  mongoose.Schema.Types.ObjectId, ref: 'Community'}
 });
 
 topicSchema.set('timestamps', true);

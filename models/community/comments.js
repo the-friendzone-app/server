@@ -10,4 +10,4 @@ const commentSchema = mongoose.Schema({
 
 commentSchema.set('timestamps', true);
 
-module.exports = mongoose.model('Comments', commentSchema);
+module.exports = mongoose.model('Thread', commentSchema);
