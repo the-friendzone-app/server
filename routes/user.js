@@ -47,22 +47,33 @@ function validateNewUser(req, res, next) {
 
 // Post to register a new user
 router.post('/', validateNewUser, (req, res, next) => {
+console.log('post attempting...')
+  // username = username.trim();
 
-  let { username, password, selfType, preferenceType } = req.body;
-
-  username = username.trim();
-
-  return User.find({ username })
-    .then(() => {
-      return User.hashPassword(password);
+  const { username, password, selfType, preferenceType } = req.body;
+  console.log(req.body)
+  let hashedPassword, hashedUsername, verificationCode;
+  return User.hashPassword(password)
+    .then(_hashedPassword => {
+      hashedPassword = _hashedPassword;
+      console.log('hashedpassword', hashedPassword)
+      console.log('nextstep')
+      hashedUsername = User.hashUsername();
+      console.log('third step')
+      console.log('hashedusername', hashedUsername)
+      verificationCode = User.createVerificationCode();
+      console.log('verification', verificationCode)
+      return { hashedPassword, hashedUsername, verificationCode };
     })
-    .then(hash => {
+    .then(({ hashedPassword, hashedUsername, verificationCode }) => {
       return User.create({
-        username,
-        password: hash,
-        // hashedUsername: (faker.commerce.productAdjective()+'-'+faker.random.word()+faker.random.number),
+        username: username,
+        hashedUsername: hashedUsername,
+        password: hashedPassword,
+        userVerificationCode: verificationCode,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
+
         // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
         //if not changed to string 'completed' can't access full site
       });
@@ -75,12 +86,11 @@ router.post('/', validateNewUser, (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000 && err.name === 'MongoError') {
-        // Username already exists
         const error = new Error('Username already taken');
         error.location = 'username';
         error.code = 422;
         error.reason = 'ValidationError';
-
+  
         next(error);
       }
     });
@@ -94,5 +104,7 @@ router.get('/:id', (req, res) => {
     })
   );
 });
+  
+
 
 module.exports = router;
