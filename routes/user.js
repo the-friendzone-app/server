@@ -47,7 +47,7 @@ function validateNewUser(req, res, next) {
 
 // Post to register a new user
 router.post('/', validateNewUser, (req, res, next) => {
-console.log('post attempting...')
+  console.log('post attempting...')
   // username = username.trim();
 
   const { username, password, selfType, preferenceType } = req.body;
@@ -90,7 +90,7 @@ console.log('post attempting...')
         error.location = 'username';
         error.code = 422;
         error.reason = 'ValidationError';
-  
+
         next(error);
       }
     });
@@ -100,11 +100,12 @@ router.get('/:id', (req, res) => {
 
   return User.findById(id).then(user =>
     res.json({
-      username: user.username
+      username: user.username,
+      hashedUsername: user.hashUsername
     })
   );
 });
-  
+
 
 
 module.exports = router;

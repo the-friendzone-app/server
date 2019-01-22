@@ -36,7 +36,7 @@ router.get('/friended/:id', (req, res, next) => {
   let { id } = req.params;
   console.log(id);
   User.findOne({ _id: id }, { friends: 1 })
-    .populate({ path: 'friended._id', select: 'username' })
+    .populate({ path: 'friended._id', select: 'hashedUsername' })
     .populate({ path: 'friended.chatroom', select: '_id' })
     .then(friends => {
       res.json(friends);

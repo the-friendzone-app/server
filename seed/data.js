@@ -10,7 +10,7 @@ const users = [
     },
     'verified': false,
     'introQuizCompleted': false,
-    'hashedUsername': 'asjasdsa1324',
+    'hashedUsername': 'Sophisticated-Crumpet51261',
     'userVerificationCode': '4535odjt',
     'friends': [
       '333333333333333333333302'
@@ -32,7 +32,7 @@ const users = [
     },
     'verified': false,
     'introQuizCompleted': false,
-    'hashedUsername': 'asjdiosa1324',
+    'hashedUsername': 'Tiny-Socks70004',
     'userVerificationCode': '9sdsadsa',
     'friends': [
       '333333333333333333333301',
@@ -59,7 +59,7 @@ const users = [
     },
     'verified': false,
     'introQuizCompleted': false,
-    'hashedUsername': 'asjdiosa1324',
+    'hashedUsername': 'Clever-Dolphin84559',
     'userVerificationCode': '9sdsadsa',
     'friends': [
       '333333333333333333333302'
