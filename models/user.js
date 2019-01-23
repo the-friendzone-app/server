@@ -30,7 +30,7 @@ userSchema.set('toJSON', {
     delete result.password;
     delete result.userVerificationCode;
     delete result.verified;
-    delete result.introQuizCompleted;
+    // delete result.introQuizCompleted;
   }
 });
 
