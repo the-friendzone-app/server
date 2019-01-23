@@ -20,6 +20,7 @@ const questionsRouter = require('./routes/questions');
 const messagesRouter = require('./routes/messages');
 const userRouter = require('./routes/user'); 
 const meetupAttendenceRouter = require('./routes/meetup-attendence');
+const userLocationRouter = require('./routes/user-location');
 
 
 const app = express();
@@ -50,6 +51,7 @@ app.use('/questions', questionsRouter);
 app.use('/users', userRouter);
 app.use('/messages', messagesRouter);
 app.use('/meetup-attendence', meetupAttendenceRouter);
+app.use('/user-location', userLocationRouter);
 
 
 // Custom 404 Not Found Error Handler
