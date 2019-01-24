@@ -86,13 +86,13 @@ router.post('/comments/post', jwtAuth, (req, res, next) => {
         return Thread.findOneAndUpdate({_id: req.body.replyTo}, {'$push': {'responses': commentId }})
           .then(()=> {
             return Topic.findOneAndUpdate({_id: req.body.topic}, {'$push': {'comments':  commentId}})
-              .then((result) =>{
+              .then(() =>{
                 return res.json('IT HAS BEEN COMPLETED!');
               });
           });
       }  
       return Topic.findOneAndUpdate({_id: req.body.topic}, {'$push': {'comments':  commentId}})
-        .then((result) =>{
+        .then(() =>{
           return res.json('IT HAS BEEN COMPLETED!');
         });
     })
