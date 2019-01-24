@@ -69,17 +69,28 @@ router.post('/comments', jwtAuth, (req, res, next) => {
 });
 
 router.post('/comments/post', jwtAuth, (req, res, next) => {
+  
   const newComment = {
     community: req.body.community, 
     topic: req.body.topic, 
     comment: req.body.comment,
-    user: req.user._id 
+    user: req.user._id,
+    replyTo: req.body.replyTo,
   };
-  
+
   let commentId;
   return Thread.create(newComment)
     .then(result => {
       commentId = result.id;
+      if(req.body.replyTo){
+        return Thread.findOneAndUpdate({_id: req.body.replyTo}, {'$push': {'responses': commentId }})
+          .then(()=> {
+            return Topic.findOneAndUpdate({_id: req.body.topic}, {'$push': {'comments':  commentId}})
+              .then((result) =>{
+                return res.json('IT HAS BEEN COMPLETED!');
+              });
+          });
+      }  
       return Topic.findOneAndUpdate({_id: req.body.topic}, {'$push': {'comments':  commentId}})
         .then((result) =>{
           return res.json('IT HAS BEEN COMPLETED!');

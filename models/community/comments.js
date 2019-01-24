@@ -6,7 +6,9 @@ const commentSchema = mongoose.Schema({
   community: { type:  mongoose.Schema.Types.ObjectId, ref: 'Community' },
   user: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
   comment: {type: String, required: true},
-  edited: {type: Boolean, default: false}
+  edited: {type: Boolean, default: false},
+  replyTo: { type:  mongoose.Schema.Types.ObjectId, ref: 'Thread'},
+  responses: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Thread'}]
 });
 
 commentSchema.set('timestamps', true);
