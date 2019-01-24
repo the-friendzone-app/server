@@ -4,6 +4,7 @@ const express = require('express');
 const passport = require('passport');
 
 const Questions = require('../models/question');
+const Quiz = require('./models/quiz');
 
 // const jsonParser = bodyParser.json
 
@@ -17,7 +18,7 @@ const jwtAuth = passport.authenticate('jwt', {
 router.use(jwtAuth);
 // Fetch Intro Quiz
 router.get('/intro-quiz', jwtAuth, (req,res,next)=>{
-    Questions.find({category: 'intro', active: true})
+    Quiz.find({category: 'intro', active: true})
     .then(results => {
         res.json(results);
     })
