@@ -87,7 +87,43 @@ router.post('/comments/post', jwtAuth, (req, res, next) => {
     })
   
     .catch(err => next(err));
+});
+
+router.put('/comments/delete', jwtAuth, (req, res, next) => {
+  const deletedComment = {
+    _id: req.body._id,
+    community: req.body.community, 
+    topic: req.body.topic, 
+    comment: req.body.comment,
+    user: '000000000000000000000000'
+  };
+  
+  return Thread.findOneAndUpdate({_id: deletedComment._id}, { '$set': {'comment': deletedComment.comment, 'user': deletedComment.user,  'edited': false}}, {new: true})
+    .then(() => {
+      return res.json({message: 'Your comment has been deleted'});  
+    })
+    .catch(err => next(err));
+  
+}); 
+
+router.put('/comments/edit', jwtAuth, (req, res, next) => {
+  const editedComment = {
+    _id: req.body._id,
+    community: req.body.community, 
+    topic: req.body.topic, 
+    comment: req.body.comment,
+    user: req.user._id,
+    edited: req.body.edited
+  };
+  
+  return Thread.findOneAndUpdate({_id: editedComment._id}, { '$set': {'comment': editedComment.comment, 'edited': editedComment.edited}}, {new: true})
+    .then(() => {
+      return res.json({message: 'Your comment has been edited'});  
+    })
+    .catch(err => next(err));
+  
 });  
+
 
 
 module.exports = router;
