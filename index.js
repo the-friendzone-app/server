@@ -18,12 +18,12 @@ const friendsRouter = require('./routes/friends');
 const meetupsRouter = require('./routes/meetups');
 const questionsRouter = require('./routes/questions');
 const messagesRouter = require('./routes/messages');
-const userRouter = require('./routes/user'); 
+const userRouter = require('./routes/user');
 const meetupAttendenceRouter = require('./routes/meetup-attendence');
 
 
 const app = express();
-
+const jwtAuth = passport.authenticate('jwt', { session: false });
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
@@ -43,11 +43,12 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/auth', authRouter);
-app.use ('/community', communityRouter);
+app.use('/community', communityRouter);
 app.use('/friends', friendsRouter);
 app.use('/meetups', meetupsRouter);
 app.use('/questions', questionsRouter);
 app.use('/users', userRouter);
+app.use('/messages', jwtAuth);
 app.use('/messages', messagesRouter);
 app.use('/meetup-attendence', meetupAttendenceRouter);
 
