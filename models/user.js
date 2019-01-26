@@ -3,6 +3,7 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const faker = require('faker');
+const Quiz = require('./quiz');
 
 const userSchema = new mongoose.Schema({
 
@@ -12,6 +13,12 @@ const userSchema = new mongoose.Schema({
   userVerificationCode: { type: String },
   verified: { type: Boolean, default: false },
   introQuizCompleted: { type: Boolean, default: false },
+  introQuizQuestions: [
+    {
+      questionID: {type: mongoose.Schema.Types.ObjectId, ref: Quiz},
+      userAnswer: String
+    }
+  ],
   profile: {
     selfType: { type: String },
     preferenceType: { type: String },
@@ -66,6 +73,14 @@ userSchema.methods.validatePassword = function (pwd) {
 
 userSchema.statics.hashPassword = function (pwd) {
  return bcrypt.hash(pwd, 10);
+};
+
+userSchema.statics.generateQuestions = function () {
+  return Quiz.find().then(results => {
+    this.introQuizQuestions = results.map((questions, i) => ({
+      questions
+    }));
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);
