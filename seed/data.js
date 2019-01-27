@@ -20,6 +20,12 @@ const users = [
         '_id': '333333333333333333333302',
         'chatroom': '433333333333333333333301'
       }
+    ],
+    'suggested': [
+      {
+        '_id': '333333333333333333333303',
+        'chatroom': '433333333333333333333303'
+      }
     ]
   },
   {
@@ -28,7 +34,7 @@ const users = [
     'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
     'profile': {
       selfType: 'talker',
-      preferenceType: 'talker'
+      preferenceType: 'both'
     },
     'verified': false,
     'introQuizCompleted': false,
@@ -47,6 +53,12 @@ const users = [
         '_id': '333333333333333333333303',
         'chatroom': '433333333333333333333302'
       }
+    ],
+    'suggested': [
+      {
+        '_id': '333333333333333333333304',
+        'chatroom': '433333333333333333333304'
+      }
     ]
   },
   {
@@ -55,7 +67,7 @@ const users = [
     'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
     'profile': {
       selfType: 'listener',
-      preferenceType: 'listener'
+      preferenceType: 'talker'
     },
     'verified': false,
     'introQuizCompleted': false,
@@ -68,6 +80,43 @@ const users = [
       {
         '_id': '333333333333333333333302',
         'chatroom': '433333333333333333333302'
+      }
+    ],
+    'suggested': [
+      {
+        '_id': '333333333333333333333301',
+        'chatroom': '433333333333333333333303'
+      }
+    ]
+  },
+  {
+    '_id': '333333333333333333333304',
+    'username': 'sauron',
+    'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
+    'profile': {
+      selfType: 'both',
+      preferenceType: 'both'
+    },
+    'verified': false,
+    'introQuizCompleted': false,
+    'hashedUsername': 'Awesome-Dragon84669',
+    'userVerificationCode': '9sdsadfa',
+    'friends': [
+    ],
+    'friended': [
+    ],
+    'suggested': [
+      {
+        '_id': '333333333333333333333301',
+        'chatroom': '433333333333333333333304'
+      },
+      {
+        '_id': '333333333333333333333302',
+        'chatroom': '433333333333333333333305'
+      },
+      {
+        '_id': '333333333333333333333303',
+        'chatroom': '433333333333333333333306'
       }
     ]
   }
@@ -92,6 +141,50 @@ const chat = [
       {
         'room': '433333333333333333333302',
         'handle': 'Tiny-Socks70004',
+        'message': 'Hi Hello how are you?'
+      }
+    ]
+  },
+  {
+    '_id': '433333333333333333333303',
+    'friended': ['333333333333333333333301', '333333333333333333333303'],
+    'messages': [
+      {
+        'room': '433333333333333333333303',
+        'handle': 'Clever-Dolphin84559',
+        'message': 'Hi Hello how are you?'
+      }
+    ]
+  },
+  {
+    '_id': '433333333333333333333304',
+    'friended': ['333333333333333333333301', '333333333333333333333304'],
+    'messages': [
+      {
+        'room': '433333333333333333333304',
+        'handle': 'Awesome-Dragon84669',
+        'message': 'Hi Hello how are you?'
+      }
+    ]
+  },
+  {
+    '_id': '433333333333333333333305',
+    'friended': ['333333333333333333333302', '333333333333333333333304'],
+    'messages': [
+      {
+        'room': '433333333333333333333305',
+        'handle': 'Awesome-Dragon84669',
+        'message': 'Hi Hello how are you?'
+      }
+    ]
+  },
+  {
+    '_id': '433333333333333333333306',
+    'friended': ['333333333333333333333303', '333333333333333333333304'],
+    'messages': [
+      {
+        'room': '433333333333333333333306',
+        'handle': 'Awesome-Dragon84669',
         'message': 'Hi Hello how are you?'
       }
     ]

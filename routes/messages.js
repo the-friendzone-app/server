@@ -9,6 +9,7 @@ router.get('/:id', (req, res, next) => {
   const { id } = req.params;
   Chat.findOne({ _id: id })
     .populate({ path: 'friended', select: 'username' })
+    .populate({ path: 'suggested', select: 'username' })
     .then((chat) => {
       let user2 = chat.friended.filter(user => user._id.toString() !== userId);
       if (user2.length < chat.friended.length) {
