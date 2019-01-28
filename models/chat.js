@@ -5,7 +5,6 @@ mongoose.Promise = global.Promise;
 
 const ChatSchema = mongoose.Schema({
   friended: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  suggested: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   messages: [
     {
       room: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },

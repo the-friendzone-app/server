@@ -16,11 +16,8 @@ const userSchema = new mongoose.Schema({
     selfType: { type: String },
     preferenceType: { type: String },
   },
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  suggested: [{
-    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }
-  }],
+  sentRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  recievedRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   friended: [{
     _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }

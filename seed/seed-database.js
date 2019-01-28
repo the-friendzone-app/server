@@ -6,7 +6,7 @@ const { DATABASE_URL } = require('../config');
 
 // const Question = require('../models/question');
 const User = require('../models/user');
-const Chat = require('../models/chat');
+// const Chat = require('../models/chat');
 
 const { users, chat } = require('./data');
 
@@ -22,7 +22,7 @@ mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useCreateIndex: true })
     console.info('Seeding Database...');
     return Promise.all([
       User.insertMany(users),
-      Chat.insertMany(chat)
+      // Chat.insertMany(chat)
     ]);
   })
   .then(results => {

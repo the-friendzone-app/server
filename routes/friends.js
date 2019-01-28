@@ -45,7 +45,18 @@ router.get('/friended/:id', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-
+router.delete('/friended/:userId/:id', (req, res, next) => {
+  let { id } = req.params;
+  let { userId } = req.params;
+  User.findOneAndDelete({ _id: userId }, { 'friended._id': id })
+    .then(() => {
+      return User.find({ _id: userId });
+    })
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => next(err));
+});
 //gets suggested list where perference and self matches up
 //self= talker, listener, both 
 //preference = listener, both, talker
@@ -93,6 +104,7 @@ router.get('/suggested/:id', (req, res, next) => {
     })
     .then(suggested => {
       let suggestedList = [];
+      //removes self
       for (let key in suggested) {
         if (String(suggested[key]._id) !== String(id)) {
           suggestedList.push(suggested[key]);
@@ -100,6 +112,79 @@ router.get('/suggested/:id', (req, res, next) => {
       }
       res.json(suggestedList);
     })
+    .catch(err => next(err));
+});
+router.put('/addfriend/:userId/:id', (req, res, next) => {
+  //suggested id = person youre adding
+  //user id = actual user
+  let { id } = req.params;
+  let recieverId = id;
+  let { userId } = req.params;
+  let senderId = userId;
+  // console.log(suggestedId);
+  // console.log(userId);
+  let _user;
+  User.findOne({ _id: senderId })
+    .then(user => {
+      _user = user;
+      return User.findOne({ _id: recieverId })
+        .populate({ path: 'friended._id', select: 'hashedUsername' })
+        .then(user => {
+          console.log(user.friended);
+          if (user.friended.find(id => id._id._id.toString() === senderId)) {
+            console.log('user is already a friend');
+            return;
+          } else if (_user.sentRequest.find(id => id._id._id.toString() === recieverId)) {
+            console.log('friend request already sent');
+            return;
+          }
+          else if (_user.recievedRequest.find(id => id.toString() === recieverId)) {
+            Chat.create({ friended: [recieverId, senderId] }).then(
+              chat => {
+                let chatroom = chat._id;
+                _user.recievedRequest = _user.recievedRequest.filter(
+                  userId => userId.toString() !== recieverId
+                );
+                _user.friended.push({ _id: recieverId, chatroom });
+                user.sentRequest = user.sentRequest.filter(userId => userId.toString() !== senderId);
+                user.friended.push({ _id: senderId, chatroom });
+
+                return Promise.all([
+                  User.findOneAndUpdate(
+                    { _id: senderId },
+                    {
+                      recievedRequest: _user.recievedRequest,
+                      friended: _user.friended,
+                    }
+                  ),
+                  User.findOneAndUpdate(
+                    { _id: recieverId },
+                    {
+                      sentRequest: user.sentRequest,
+                      friended: user.friended
+                    }
+                  )
+                ]);
+              }
+            );
+          } else {
+            return Promise.all([
+              User.findOneAndUpdate(
+                { _id: recieverId },
+                { $push: { recievedRequest: senderId } },
+                { new: true }
+              ),
+              User.findOneAndUpdate(
+                { _id: senderId },
+                { $push: { sentRequest: recieverId } },
+                { new: true }
+              )
+            ]);
+          }
+        });
+      // console.log(friends);
+    })
+    .then(() => res.sendStatus(204))
     .catch(err => next(err));
 });
 module.exports = router;
