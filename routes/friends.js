@@ -59,6 +59,8 @@ router.get('/suggested/:id', (req, res, next) => {
       _userSelfType = user.profile.selfType;
       _userPreferenceType = user.profile.preferenceType;
       //make sure you're returning the right suggested users
+      //frodo self:talker, pref:both
+      //gollum self:listener, pref:talker
       if (_userSelfType === 'both') {
         if (_userPreferenceType === 'both') {
           return User.find({ 'profile.preferenceType': { $in: ['talker', 'listener', 'both'] } });
@@ -66,12 +68,28 @@ router.get('/suggested/:id', (req, res, next) => {
           return User.find({ 'profile.selfType': { $in: [_userPreferenceType] } });
         }
       }
-      return User.find({
-        $and: [
-          { 'profile.preferenceType': { $in: [_userSelfType] } },
-          { 'profile.selfType': { $in: [_userPreferenceType, 'both'] } }
-        ]
-      });
+      if (_userSelfType === 'listener') {
+        if (_userPreferenceType === 'both') {
+          return User.find({ 'profile.preferenceType': { $in: ['talker', 'listener', 'both'] } });
+        }
+        return User.find({
+          $and: [
+            { 'profile.preferenceType': { $in: ['listener', 'both'] } },
+            { 'profile.selfType': { $in: [_userPreferenceType, 'both'] } }
+          ]
+        });
+      }
+      if (_userSelfType === 'talker') {
+        if (_userPreferenceType === 'both') {
+          return User.find({ 'profile.preferenceType': { $in: ['talker', 'listener', 'both'] } });
+        }
+        return User.find({
+          $and: [
+            { 'profile.preferenceType': { $in: ['talker', 'both'] } },
+            { 'profile.selfType': { $in: [_userPreferenceType, 'both'] } }
+          ]
+        });
+      }
     })
     .then(suggested => {
       let suggestedList = [];
@@ -80,7 +98,6 @@ router.get('/suggested/:id', (req, res, next) => {
           suggestedList.push(suggested[key]);
         }
       }
-
       res.json(suggestedList);
     })
     .catch(err => next(err));
