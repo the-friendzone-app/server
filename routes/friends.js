@@ -46,9 +46,11 @@ router.get('/friended/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 router.delete('/friended/:userId/:id', (req, res, next) => {
-  let { id } = req.params;
+  let { id } = req.params; //chatroom id
   let { userId } = req.params;
-  User.findOneAndDelete({ _id: userId }, { 'friended._id': id })
+  console.log(id);
+  console.log(userId);
+  Chat.findOneAndDelete({ _id: id })
     .then(() => {
       return User.find({ _id: userId });
     })
