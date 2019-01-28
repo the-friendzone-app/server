@@ -2,73 +2,34 @@
 
 const questions = [
     {
-        question: '1What would you do if your friend lied to you?',
-        options: [
-            {
-                text: '1option number 1',
-                pros: '1pro of option number 1',
-                cons: '1con of option number 1'
-            },
-            {
-                text: '1option number 2',
-                pros: '1pro of option number 2',
-                cons: '1con of option number 2'
-            },
-            {
-                text: '1option number 3',
-                pros: '1pro of option number 3',
-                cons: '1con of option number 3'
-            }
-        ],
+        questionText: '1What would you do if your friend lied to you?',
+        option1: 'option1',
+        option2: 'option2',
+        option3: 'option3',
         category: 'intro',
+        active: true
       
     },
     {
-        question: '2What would you do if your friend hit you',
-        options: [
-            {
-                text: '2option number 1',
-                pros: '2pro of option number 1',
-                cons: '2con of option number 1'
-            },
-            {
-                text: '2option number 2',
-                pros: '2pro of option number 2',
-                cons: '2con of option number 2'
-            },
-            {
-                text: '2option number 3',
-                pros: '2pro of option number 3',
-                cons: '2con of option number 3'
-            }
-        ],
+        questionText: '2What would you do if your friend hit you',
+        option1: 'option1',
+        option2: 'option2',
+        option3: 'option3',
         category: 'intro',
+        active: true
        
     },
     {
-        question: '3What would you do if your friend stole from you',
-        options: [
-            {
-                text: '3option number 1',
-                pros: '3pro of option number 1',
-                cons: '3con of option number 1'
-            },
-            {
-                text: '3option number 2',
-                pros: '3pro of option number 2',
-                cons: '3con of option number 2'
-            },
-            {
-                text: '3option number 3',
-                pros: '3pro of option number 3',
-                cons: '3con of option number 3'
-            }
-        ],
+        questionText: '3What would you do if your friend stole from you',
+        option1: 'option1',
+        option2: 'option2',
+        option3: 'option3',
         category: 'intro',
+        active: true
         
     },
     {
-        question: 'What would you do if your friend stole from you?',
+        questionText: 'What would you do if your friend stole from you?',
         options: [
             {
                 text: 'I\'d confront them about it',
@@ -101,7 +62,7 @@ const questions = [
         active: true
     },
     {
-        question: 'What would you do if you and your friend had plans, and the canceled on you last minute?',
+        questionText: 'What would you do if you and your friend had plans, and the canceled on you last minute?',
         options: [
             {
                 text: '5option number 1',
@@ -123,7 +84,7 @@ const questions = [
         active: true
     },
     {
-        question: 'What would you do if your friend told you they were depressed?',
+        questionText: 'What would you do if your friend told you they were depressed?',
         options: [
             {
                 text: '6option number 1',
@@ -145,7 +106,7 @@ const questions = [
         active: true
     },
     {
-        question: 'InactiveQuestion Test',
+        questionText: 'InactiveQuestion Test',
         options: [
             {
                 text: '7option number 1',
