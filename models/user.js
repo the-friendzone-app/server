@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   userVerificationCode: { type: String },
   verified: { type: Boolean, default: false },
+  marked: {type: Boolean, default: false},
   introQuizCompleted: { type: Boolean, default: false },
   introQuizQuestions: [
     {
@@ -37,7 +38,7 @@ userSchema.set('toJSON', {
     delete result.password;
     delete result.userVerificationCode;
     delete result.verified;
-    // delete result.introQuizCompleted;
+    delete result.marked;
   }
 });
 
@@ -75,13 +76,8 @@ userSchema.statics.hashPassword = function (pwd) {
  return bcrypt.hash(pwd, 10);
 };
 
-userSchema.statics.generateQuestions = function () {
-  return Quiz.find().then(results => {
-    this.introQuizQuestions = results.map((questions, i) => ({
-      questions
-    }));
-  });
-};
+
+
 
 module.exports = mongoose.model('User', userSchema);
 

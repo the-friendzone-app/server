@@ -62,8 +62,6 @@ router.post('/', validateNewUser, (req, res, next) => {
       console.log('third step')
       console.log('hashedusername', hashedUsername)
       verificationCode = User.createVerificationCode();
-      introQuizQuestions = User.generateQuestions();
-      console.log('introquizquestions', introQuizQuestions)
       console.log('verification', verificationCode)
       return { hashedPassword, hashedUsername, verificationCode };
     })
@@ -73,7 +71,6 @@ router.post('/', validateNewUser, (req, res, next) => {
         hashedUsername: hashedUsername,
         password: hashedPassword,
         userVerificationCode: verificationCode,
-        introQuizQuestions: introQuizQuestions,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
       });
