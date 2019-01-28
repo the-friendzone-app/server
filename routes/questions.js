@@ -18,48 +18,87 @@ const jwtAuth = passport.authenticate('jwt', {
 
 router.use(jwtAuth);
 // Fetch Intro Quiz
-router.get('/intro-quiz', jwtAuth, (req,res,next)=>{
-    Quiz.find({category: 'intro', active: true})
+router.get('/intro-quiz', jwtAuth, (req, res, next) => {
+  Quiz.find({
+    category: 'intro',
+    active: true
+  })
     .then(results => {
-        res.json({questions:results,answered:req.user.introQuizQuestions});
+      res.json({
+        questions: results,
+        answered: req.user.introQuizQuestions
+      });
     })
     .catch(err => {
-        next(err);
+      next(err);
     })
 });
 
-router.get('/user-answered/:questionId/:answer', jwtAuth, (req,res,next)=>{
-    console.log('here',req.user._id);
-    User.findOne({_id:req.user._id})
-        .then(user => {
-            console.log(user);
-            user.introQuizQuestions.push({questionID:req.params.questionId,userAnswer:req.params.answer});
+router.get('/user-answered/:questionId/:answer', jwtAuth, (req, res, next) => {
+  console.log('here', req.user._id);
+  console.log('questionId', req.params.questionId);
+  console.log('answer', req.params.answer);
+
+  Quiz.findOne({_id: req.params.questionId})
+    .then((result) => {
+      if (req.params.answer === result.trapdoor) {
+        console.log('BAdANSWER!');
+        return User.findOneAndUpdate({_id: req.user._id}, {'$set': {'marked': true, 'password': 'generator-chipanzee-party-arms'}}, {new: true})
+          .then(user => {
+            console.log(user.password);
+            user.introQuizQuestions.push({
+              questionID: req.params.questionId,
+              userAnswer: req.params.answer
+            });
             return user.save();
+          })
+          .then((newUser) => res.send(newUser.introQuizQuestions));
+      } else {
+        console.log('Good Answer!');
+        return User.findOne({
+          _id: req.user._id
         })
-        .then((newUser)=> res.send(newUser.introQuizQuestions))
-        .catch(err=>{
-            console.error(err);
-            next(err)
-        });
-});
-//Fetch Dynamic personality-poll categories
-router.get('/personality-polls/:category', jwtAuth, (req,res,next)=> {
-    Questions.findOne({category: req.params.category})
-    .then(results => {
-        res.json(results);
+          .then(user => {
+            // console.log(user);
+            user.introQuizQuestions.push({
+              questionID: req.params.questionId,
+              userAnswer: req.params.answer
+            });
+            return user.save();
+          })
+          .then((newUser) => res.send(newUser.introQuizQuestions));
+      }
     })
     .catch(err => {
-        next(err);
+      console.error(err);
+      next(err);
+    });
+
+});
+
+
+//Fetch Dynamic personality-poll categories
+router.get('/personality-polls/:category', jwtAuth, (req, res, next) => {
+  Questions.findOne({
+    category: req.params.category
+  })
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      next(err);
     })
 })
 //get all active poll questions
-router.get('/personality-polls', jwtAuth, (req,res,next)=> {
-    Questions.find({active: true})
+router.get('/personality-polls', jwtAuth, (req, res, next) => {
+  Questions.find({
+    active: true
+  })
     .then(results => {
-        res.json(results);
+      res.json(results);
     })
     .catch(err => {
-        next(err);
+      next(err);
     })
 })
 
@@ -97,11 +136,10 @@ router.get('/personality-polls', jwtAuth, (req,res,next)=> {
 //       })
 //       .then(() => {
 //         res.json({
-      
+
 //         });
 //       })
 //       .catch(next);
 
 
 module.exports = router;
-
