@@ -12,14 +12,17 @@ const users = [
     'introQuizCompleted': false,
     'hashedUsername': 'Sophisticated-Crumpet51261',
     'userVerificationCode': '4535odjt',
-    'friends': [
-      '333333333333333333333302'
-    ],
+    // 'friends': [
+    //   '333333333333333333333302'
+    // ],
     'friended': [
-      {
-        '_id': '333333333333333333333302',
-        'chatroom': '433333333333333333333301'
-      }
+      // {
+      //   '_id': '333333333333333333333302',
+      //   'chatroom': '433333333333333333333301'
+      // }
+    ],
+    'suggested': [
+
     ]
   },
   {
@@ -28,25 +31,28 @@ const users = [
     'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
     'profile': {
       selfType: 'talker',
-      preferenceType: 'talker'
+      preferenceType: 'both'
     },
     'verified': false,
     'introQuizCompleted': false,
     'hashedUsername': 'Tiny-Socks70004',
     'userVerificationCode': '9sdsadsa',
-    'friends': [
-      '333333333333333333333301',
-      '333333333333333333333303'
-    ],
+    // 'friends': [
+    //   // '333333333333333333333301',
+    //   // '333333333333333333333303'
+    // ],
     'friended': [
-      {
-        '_id': '333333333333333333333301',
-        'chatroom': '433333333333333333333302'
-      },
-      {
-        '_id': '333333333333333333333303',
-        'chatroom': '433333333333333333333303'
-      }
+      // {
+      //   '_id': '333333333333333333333301',
+      //   'chatroom': '433333333333333333333301'
+      // },
+      // {
+      //   '_id': '333333333333333333333303',
+      //   'chatroom': '433333333333333333333302'
+      // }
+    ],
+    'suggested': [
+
     ]
   },
   {
@@ -55,20 +61,43 @@ const users = [
     'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
     'profile': {
       selfType: 'listener',
-      preferenceType: 'listener'
+      preferenceType: 'talker'
     },
     'verified': false,
     'introQuizCompleted': false,
     'hashedUsername': 'Clever-Dolphin84559',
     'userVerificationCode': '9sdsadsa',
-    'friends': [
-      '333333333333333333333302'
-    ],
+    // 'friends': [
+    //   // '333333333333333333333302'
+    // ],
     'friended': [
-      {
-        '_id': '333333333333333333333302',
-        'chatroom': '433333333333333333333304'
-      }
+      // {
+      //   // '_id': '333333333333333333333302',
+      //   // 'chatroom': '433333333333333333333302'
+      // }
+    ],
+    'suggested': [
+
+    ]
+  },
+  {
+    '_id': '333333333333333333333304',
+    'username': 'sauron',
+    'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
+    'profile': {
+      selfType: 'both',
+      preferenceType: 'both'
+    },
+    'verified': false,
+    'introQuizCompleted': false,
+    'hashedUsername': 'Awesome-Dragon84669',
+    'userVerificationCode': '9sdsadfa',
+    // 'friends': [
+    // ],
+    'friended': [
+    ],
+    'suggested': [
+
     ]
   }
 ];
@@ -76,49 +105,26 @@ const users = [
 const chat = [
   {
     '_id': '433333333333333333333301',
-    'friended': '333333333333333333333302',
+    'friended': ['333333333333333333333301', '333333333333333333333302'],
     'messages': [
       {
         'room': '433333333333333333333301',
-        'handle': 'samwise',
+        'handle': 'Tiny-Socks70004',
         'message': 'Hi Hello how are you?'
       }
     ]
   },
   {
     '_id': '433333333333333333333302',
-    'friended': '333333333333333333333301',
+    'friended': ['333333333333333333333302', '333333333333333333333303'],
     'messages': [
       {
         'room': '433333333333333333333302',
-        'handle': 'frodo',
-        'message': 'Hi Hello how are you?'
-      }
-    ]
-  },
-  {
-    '_id': '433333333333333333333303',
-    'friended': '333333333333333333333303',
-    'messages': [
-      {
-        'room': '433333333333333333333303',
-        'handle': 'frodo',
-        'message': 'Hi Hello how are you?'
-      }
-    ]
-  },
-  {
-    '_id': '433333333333333333333304',
-    'friended': '333333333333333333333302',
-    'messages': [
-      {
-        'room': '433333333333333333333304',
-        'handle': 'gollum',
+        'handle': 'Tiny-Socks70004',
         'message': 'Hi Hello how are you?'
       }
     ]
   }
-
 ];
 
 const questions = [
