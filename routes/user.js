@@ -6,6 +6,8 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+
+
 function validateNewUser(req, res, next) {
   const { username, password } = req.body;
 
@@ -107,3 +109,7 @@ router.get('/:id', (req, res) => {
 
 
 module.exports = router;
+
+
+
+
