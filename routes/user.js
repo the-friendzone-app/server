@@ -100,8 +100,7 @@ router.get('/:id', (req, res) => {
 
   return User.findById(id).then(user =>
     res.json({
-      username: user.username,
-      hashedUsername: user.hashUsername
+      user
     })
   );
 });
