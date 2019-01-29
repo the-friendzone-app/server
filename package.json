@@ -1,7 +1,7 @@
 {
-  "name": "thinkful-backend-template",
+  "name": "The Friend Zone Client",
   "version": "1.0.0",
-  "description": "Template for an Express backend",
+  "description": "Client for The Friend Zone",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -12,8 +12,8 @@
     "heroku": "node index.js",
     "travis": "npm run mocha"
   },
-  "author": "Joe Turner <jturner@thinkful.com>",
-  "license": "MIT",
+  "author": "The Friend Zone Dev Team<thefriendzonedev@gmail.com>",
+  "license": "Open",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
