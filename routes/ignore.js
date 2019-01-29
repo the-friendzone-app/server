@@ -10,12 +10,10 @@ const router = express.Router();
 router.put('/:id', (req, res, next) => {
   let { id } = req.params;
   let ignoredUser = req.body.ignoredUser;
-  let _user;
-  // console.log(id);
-  // console.log(ignoredUser);
+  console.log(id);
+  console.log(ignoredUser);
   User.findOne({ _id: id })
     .then((user) => {
-      _user = user;
       // console.log(user);
       user.ignored = user.ignored.filter(id => String(id) !== ignoredUser);
       // console.log(user.ignored);
