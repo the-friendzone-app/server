@@ -6,6 +6,8 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+
+
 function validateNewUser(req, res, next) {
   const { username, password } = req.body;
 
@@ -65,7 +67,7 @@ router.post('/', validateNewUser, (req, res, next) => {
       console.log('verification', verificationCode)
       return { hashedPassword, hashedUsername, verificationCode };
     })
-    .then(({ hashedPassword, hashedUsername, verificationCode }) => {
+    .then(({ hashedPassword, hashedUsername, verificationCode, introQuizQuestions }) => {
       return User.create({
         username: username,
         hashedUsername: hashedUsername,
@@ -73,11 +75,9 @@ router.post('/', validateNewUser, (req, res, next) => {
         userVerificationCode: verificationCode,
         "profile.selfType": selfType,
         "profile.preferenceType": preferenceType,
-
-        // userVerificationCode: faker.random.alphaNumeric(), //ask TJ how to generate 7 length calling itself
-        //if not changed to string 'completed' can't access full site
       });
     })
+    
     .then(user => {
       return res
         .status(201)
@@ -108,3 +108,7 @@ router.get('/:id', (req, res) => {
 
 
 module.exports = router;
+
+
+
+
