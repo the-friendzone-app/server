@@ -1,18 +1,18 @@
 {
-  "name": "The Friend Zone Client",
+  "name": "the-friend-zone-server",
   "version": "1.0.0",
-  "description": "Client for The Friend Zone",
+  "description": "Server for The Friend Zone",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
     "mocha": "mocha --exit --file test/setup.test.js",
-    "mocha-exit0": "mocha --exit --file test/setup.test.js",
+    "mocha-exit0": "mocha --exit --timeout 5000",
     "test": "nodemon --exec npm run mocha-exit0",
     "cover": "nodemon --exec nyc --reporter=lcov --reporter=text-summary npm run mocha-exit0",
     "heroku": "node index.js",
     "travis": "npm run mocha"
   },
-  "author": "The Friend Zone Dev Team<thefriendzonedev@gmail.com>",
+  "author": "The Friend Zonem Dev Team<thefriendzonedev@gmail.com>",
   "license": "Open",
   "dependencies": {
     "bcryptjs": "^2.4.3",
