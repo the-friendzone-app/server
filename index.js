@@ -20,7 +20,11 @@ const questionsRouter = require('./routes/questions');
 const messagesRouter = require('./routes/messages');
 const userRouter = require('./routes/user');
 const meetupAttendenceRouter = require('./routes/meetup-attendence');
+const userLocationRouter = require('./routes/user-location');
+const eventbriteSearchRouter = require('./routes/eventbrite-search');
+const eventbriteSearchCompleteRouter = require('./routes/eventbrite-search-complete');
 const ignoreRouter = require('./routes/ignore');
+
 
 
 const app = express();
@@ -52,6 +56,9 @@ app.use('/users', userRouter);
 app.use('/messages', jwtAuth);
 app.use('/messages', messagesRouter);
 app.use('/meetup-attendence', meetupAttendenceRouter);
+app.use('/user-location', userLocationRouter);
+app.use('/eventbrite-search', eventbriteSearchRouter);
+app.use('/eventbrite-search-complete', eventbriteSearchCompleteRouter);
 app.use('/ignore', jwtAuth);
 app.use('/ignore', ignoreRouter);
 
