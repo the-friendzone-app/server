@@ -12,12 +12,12 @@ const { users, chat } = require('./data');
 
 console.log(`Connecting to mongodb at ${DATABASE_URL}`);
 mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useCreateIndex: true })
-  // .then(() => {
-  //   console.info('Deleting Data...');
-  //   return Promise.all([
-  //     User.deleteMany()
-  //   ]);
-  // })
+  .then(() => {
+    console.info('Deleting Data...');
+    return Promise.all([
+      User.deleteMany()
+    ]);
+  })
   .then(() => {
     console.info('Seeding Database...');
     return Promise.all([

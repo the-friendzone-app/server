@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   hashedUsername: { type: String },
   password: { type: String, required: true },
   userVerificationCode: { type: String },
+  email: { type: String, unique: true },
   verified: { type: Boolean, default: false },
   introQuizCompleted: { type: Boolean, default: false },
   profile: {
@@ -21,7 +22,13 @@ const userSchema = new mongoose.Schema({
   friended: [{
     _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }
-  }]
+  }],
+  ignored: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  suggested: [{
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Schat' }
+  }],
+
 });
 
 userSchema.set('toJSON', {
