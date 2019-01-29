@@ -6,6 +6,8 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+
+
 function validateNewUser(req, res, next) {
   const { username, password } = req.body;
 
@@ -98,8 +100,7 @@ router.get('/:id', (req, res) => {
 
   return User.findById(id).then(user =>
     res.json({
-      username: user.username,
-      hashedUsername: user.hashUsername
+      user
     })
   );
 });
@@ -107,3 +108,7 @@ router.get('/:id', (req, res) => {
 
 
 module.exports = router;
+
+
+
+

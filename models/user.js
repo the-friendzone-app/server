@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   hashedUsername: { type: String },
   password: { type: String, required: true },
   userVerificationCode: { type: String },
+  email: { type: String, unique: true },
   verified: { type: Boolean, default: false },
   marked: {type: Boolean, default: false},
   introQuizCompleted: { type: Boolean, default: false },
@@ -24,11 +25,18 @@ const userSchema = new mongoose.Schema({
     selfType: { type: String },
     preferenceType: { type: String },
   },
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  sentRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  recievedRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   friended: [{
     _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }
-  }]
+  }],
+  ignored: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  suggested: [{
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    chatroom: { type: mongoose.Schema.Types.ObjectId, ref: 'Schat' }
+  }],
+
 });
 
 userSchema.set('toJSON', {
@@ -38,30 +46,26 @@ userSchema.set('toJSON', {
     delete result.password;
     delete result.userVerificationCode;
     delete result.verified;
-    delete result.marked;
   }
 });
 
-
-
-
 userSchema.statics.hashUsername = function () {
-  let randomAdjectives = ['Awesome','Futuristic','Happy','Evil','Sleepy','Wild','Sneaky','Cute','Chibi','Kawaii','Giant','Tiny','Super','Practical','Little','Silent','Smoky','Opalescent','Dark','Sparkling','Tasty','Secret','Misty','Shiny','Rare','Special','Friendly','Perfect','Wonderful','Incredible','Amazing','Ethereal','Clever','Phantom','Sophisticated','Intelligent','Super','Blue','Red','Green','Yellow','Purple','Pink','Orange','Smart']
-  let randomAdjective = randomAdjectives[Math.floor(Math.random()*randomAdjectives.length)];
-  let randomWords = ['Cat', 'Hotdog', 'Dragon', 'Fish', 'Tomato', 'Fire', 'Shrimp','Poodle','Glasses','Leaf','Key','Dog','Sandwich','Puppy','Teacup','Sunset','Orangutan','Guide','Electricity','Spoon','Bed','Pajamas','Mountain','Waterfall','Pirate','Sailor','Socks','Ninja','Assassin','Warrior','Druid','Viper','Genius','Banana','Grapefruit','Llama','Skeleton','Duckling','Wizard','Tiger','Lion','Bear','Crab','Rogue','Magician','Detective','Lizard','Racecar','Hacker','Winter','Omelette','Pterodactyl','Waffle','Astronaut','Dinosaur','Porcupine','Jaguar','Spaceship','Sloth','Midnight','Birthdaycake','Potion','Axolotl','Hawk','Spider','Grasshopper','Octopus','Dolphin','Thunder','Lightning','Blizzard','Donut','Volcano','Captain','Meteor','Swordfish','Crumpet']
-  let randomWord = randomWords[Math.floor(Math.random()*randomWords.length)];
-let hashedname = 
-randomAdjective+'-'+randomWord+faker.random.number();
+  let randomAdjectives = ['Awesome', 'Futuristic', 'Happy', 'Evil', 'Sleepy', 'Wild', 'Sneaky', 'Cute', 'Chibi', 'Kawaii', 'Giant', 'Tiny', 'Super', 'Practical', 'Little', 'Silent', 'Smoky', 'Opalescent', 'Dark', 'Sparkling', 'Tasty', 'Secret', 'Misty', 'Shiny', 'Rare', 'Special', 'Friendly', 'Perfect', 'Wonderful', 'Incredible', 'Amazing', 'Ethereal', 'Clever', 'Phantom', 'Sophisticated', 'Intelligent', 'Super', 'Blue', 'Red', 'Green', 'Yellow', 'Purple', 'Pink', 'Orange', 'Smart']
+  let randomAdjective = randomAdjectives[Math.floor(Math.random() * randomAdjectives.length)];
+  let randomWords = ['Cat', 'Hotdog', 'Dragon', 'Fish', 'Tomato', 'Fire', 'Shrimp', 'Poodle', 'Glasses', 'Leaf', 'Key', 'Dog', 'Sandwich', 'Puppy', 'Teacup', 'Sunset', 'Orangutan', 'Guide', 'Electricity', 'Spoon', 'Bed', 'Pajamas', 'Mountain', 'Waterfall', 'Pirate', 'Sailor', 'Socks', 'Ninja', 'Assassin', 'Warrior', 'Druid', 'Viper', 'Genius', 'Banana', 'Grapefruit', 'Llama', 'Skeleton', 'Duckling', 'Wizard', 'Tiger', 'Lion', 'Bear', 'Crab', 'Rogue', 'Magician', 'Detective', 'Lizard', 'Racecar', 'Hacker', 'Winter', 'Omelette', 'Pterodactyl', 'Waffle', 'Astronaut', 'Dinosaur', 'Porcupine', 'Jaguar', 'Spaceship', 'Sloth', 'Midnight', 'Birthdaycake', 'Potion', 'Axolotl', 'Hawk', 'Spider', 'Grasshopper', 'Octopus', 'Dolphin', 'Thunder', 'Lightning', 'Blizzard', 'Donut', 'Volcano', 'Captain', 'Meteor', 'Swordfish', 'Crumpet']
+  let randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+  let hashedname =
+    randomAdjective + '-' + randomWord + faker.random.number();
 
-return hashedname;
+  return hashedname;
 };
 
 userSchema.statics.createVerificationCode = function () {
   let code = ''
-for(let i = 0; i < 8; i++){
-  code += faker.random.alphaNumeric();
+  for (let i = 0; i < 8; i++) {
+    code += faker.random.alphaNumeric();
 
-}
+  }
   return code;
 
 };
@@ -73,7 +77,7 @@ userSchema.methods.validatePassword = function (pwd) {
 
 
 userSchema.statics.hashPassword = function (pwd) {
- return bcrypt.hash(pwd, 10);
+  return bcrypt.hash(pwd, 10);
 };
 
 
