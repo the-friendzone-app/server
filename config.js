@@ -13,4 +13,5 @@ module.exports = {
   
   JWT_SECRET : process.env.JWT_SECRET || 'Friendz4Ever',
   JWT_EXPIRY : process.env.JWT_EXPIRY || '7d',
+  EVENTBRITE_API_KEY: process.env.EVENTBRITE_API_KEY,
 };
