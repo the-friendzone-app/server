@@ -43,7 +43,7 @@ router.get('/user-answered/:questionId/:answer', jwtAuth, (req, res, next) => {
         .then((result) => {
             if (req.params.answer === result.trapdoor) {
                 console.log('BAdANSWER!');
-                return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true, 'password': 'generator-chipanzee-party-arms' } }, { new: true })
+                return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true }}, { new: true })
                     .then(user => {
                         console.log(user.password);
                         user.introQuizQuestions.push({
