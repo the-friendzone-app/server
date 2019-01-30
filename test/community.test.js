@@ -14,7 +14,7 @@ const Topic = require('../models/community/topic');
 const Thread = require('../models/community/comments');
 const User = require('../models/user');
 
-const {communities, topics, comments} = require('../seed-dataCommunity');
+const {communities, topics, comments} = require('../seed/seed-dataCommunity');
 const {users} = require('../seed/data');
 
 const {TEST_DATABASE_URL} = require('../config');
@@ -254,6 +254,140 @@ describe('The Friend Zone Community Router', function () {
         });
     });
 
+    it('should  not create a comment without comment content /community/comments/post', function (){
+      
+      const topicId = '200000000000000000000001';
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: '',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+      
+      return Promise.all([
+        Thread.find({'topic': topicId}),
+        chai.request(app).post('/community/comments/post').set('Authorization', `Bearer ${token}`).send(newComment)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.own.property('message');
+        });
+    });
+  });
+
+  describe('/PUT /comments routes', function() {
+    it('should update comment with new comment content /community/comments/edit', function (){
+      
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'test comment',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+
+      const editedComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'newly updated test comment',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+
+
+      return Thread.create(newComment)
+        .then((result)=>{
+          editedComment._id = result.id;
+          return Promise.all([
+            Thread.find({_id: editedComment._id}),
+            chai.request(app).put('/community/comments/edit').set('Authorization', `Bearer ${token}`).send(editedComment)
+          ])
+            .then(function([data,res]) {
+              expect(res).to.be.json;
+              expect(res).to.have.status(201);
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.have.own.property('comment','newly updated test comment');
+              expect(res.body).to.have.own.property('user','000000000000000000000001');
+            });
+        });
+    });
+
+    it('should not update comment with no comment content and return an error /community/comments/edit', function (){
+      
+      const topicId = '200000000000000000000001';
+      
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'test comment',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+
+      const editedComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: '',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+
+
+      return Thread.create(newComment)
+        .then((result)=>{
+          editedComment._id = result.id;
+          return Promise.all([
+            Thread.find({_id: editedComment._id}),
+            chai.request(app).put('/community/comments/edit').set('Authorization', `Bearer ${token}`).send(editedComment)
+          ])
+            .then(function([data,res]) {
+              expect(res).to.be.json;
+              expect(res).to.have.status(400);
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.have.own.property('message');
+            });
+        });
+    });
+
+    it('should replace comment with deleted comment filler /community/comments/delete', function (){
+      
+      const topicId = '200000000000000000000001';
+      
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'test comment',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+
+      const deleteComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        user: '000000000000000000000000',
+        replyTo: '300000000000000000000001'
+      };
+
+
+      return Thread.create(newComment)
+        .then((result)=>{
+          deleteComment._id = result.id;
+          return Promise.all([
+            Thread.find({_id: deleteComment._id}),
+            chai.request(app).put('/community/comments/delete').set('Authorization', `Bearer ${token}`).send(deleteComment)
+          ])
+            .then(function([data,res]) {
+              expect(res).to.be.json;
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.have.own.property('comment','[[  This comment has been deleted  :(  ]]');
+              expect(res.body).to.have.own.property('user','000000000000000000000000');
+            });
+        });
+    });
   });
   
 

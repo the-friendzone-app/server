@@ -90,7 +90,8 @@ router.post('/comments', jwtAuth, (req, res, next) => {
 });
 
 router.post('/comments/post', jwtAuth, (req, res, next) => {
-  
+  const {comment} = req.body;
+
   const newComment = {
     community: req.body.community, 
     topic: req.body.topic, 
@@ -98,6 +99,12 @@ router.post('/comments/post', jwtAuth, (req, res, next) => {
     user: req.user._id,
     replyTo: req.body.replyTo,
   };
+
+  if(!comment){
+    const err = new Error('Missing comment content');
+    err.status = 400;
+    return next(err); 
+  }
 
   let commentId;
   let created;
@@ -119,23 +126,32 @@ router.post('/comments/post', jwtAuth, (req, res, next) => {
 });
 
 router.put('/comments/delete', jwtAuth, (req, res, next) => {
+
   const deletedComment = {
     _id: req.body._id,
     community: req.body.community, 
     topic: req.body.topic, 
-    comment: req.body.comment,
+    comment: '[[  This comment has been deleted  :(  ]]',
     user: '000000000000000000000000'
   };
   
   return Thread.findOneAndUpdate({_id: deletedComment._id}, { '$set': {'comment': deletedComment.comment, 'user': deletedComment.user,  'edited': false}}, {new: true})
-    .then(() => {
-      return res.json({message: 'Your comment has been deleted'});  
+    .then((result) => {
+      return res.status(200).json(result);  
     })
     .catch(err => next(err));
   
 }); 
 
 router.put('/comments/edit', jwtAuth, (req, res, next) => {
+  let { comment } = req.body;
+
+  if(!comment){
+    const err = new Error('Missing updated comment content');
+    err.status = 400;
+    return next(err); 
+  }
+  
   const editedComment = {
     _id: req.body._id,
     community: req.body.community, 
@@ -146,8 +162,8 @@ router.put('/comments/edit', jwtAuth, (req, res, next) => {
   };
   
   return Thread.findOneAndUpdate({_id: editedComment._id}, { '$set': {'comment': editedComment.comment, 'edited': editedComment.edited}}, {new: true})
-    .then(() => {
-      return res.json({message: 'Your comment has been edited'});  
+    .then((result) => {
+      return res.status(201).json(result);  
     })
     .catch(err => next(err));
   
