@@ -7,6 +7,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const app= require('../index.js');
+
+
 const Community = require('../models/community/community');
 const Topic = require('../models/community/topic');
 const Thread = require('../models/community/comments');
@@ -81,5 +83,178 @@ describe('The Friend Zone Community Router', function () {
         });
     });
   });
+
+  describe('POST with /topic routes', function() {
+    it('should return an array of topics within a specifically requested community /community/topic', function (){
+      const communityId= '100000000000000000000001';
+      return Promise.all([
+        Topic.find({community: communityId}),
+        chai.request(app).post('/community/topic').set('Authorization', `Bearer ${token}`).send({communityId})
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.length(data.length);
+        });
+    });
+
+    it('should return with an error without a specifically requested community /community/topic', function (){
+      return Promise.all([
+        Topic.find({}),
+        chai.request(app).post('/community/topic').set('Authorization', `Bearer ${token}`)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(400);
+          expect(data).to.be.a('array');
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.own.property('message'); 
+        });
+    });
+
+    it('should create a new topic with the submitted text in the appropriate community /community/topic/post', function (){
+      const newTopic = {
+        community: '100000000000000000000001', 
+        topicName: 'Test Topic Name',
+        description: 'Test Description',
+        creator: '000000000000000000000001',
+        comments:[],
+        tags:[]
+      };
+      return Promise.all([
+        Topic.create(newTopic).then(()=> Topic.find({})),
+        chai.request(app).post('/community/topic/post').set('Authorization', `Bearer ${token}`).send(newTopic)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(201);
+          expect(res.body).to.have.own.property('community', '100000000000000000000001');
+          expect(res.body).to.have.own.property('topicName', 'Test Topic Name');
+          expect(res.body).to.have.own.property('description', 'Test Description');
+          expect(res.body).to.be.an('object');
+          expect(data).to.be.an('array').with.length(4);
+          expect(data.filter(topic => topic.community.toString() === '100000000000000000000001')).to.have.length(3);
+        });
+    });
+
+    it('should not create a new topic without a topic name /community/topic/post', function (){
+      const newTopic = {
+        community: '100000000000000000000001', 
+        topicName: '',
+        description: 'Test Description',
+        creator: '000000000000000000000001',
+        comments:[],
+        tags:[]
+      };
+      return Promise.all([
+        Topic.find({}),
+        chai.request(app).post('/community/topic/post').set('Authorization', `Bearer ${token}`).send(newTopic)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.own.property('message'); 
+        });
+    });
+
+    it('should not create a new topic without a description /community/topic/post', function (){
+      const newTopic = {
+        community: '100000000000000000000001', 
+        topicName: 'Test Topic Name',
+        description: '',
+        creator: '000000000000000000000001',
+        comments:[],
+        tags:[]
+      };
+      return Promise.all([
+        Topic.find({}),
+        chai.request(app).post('/community/topic/post').set('Authorization', `Bearer ${token}`).send(newTopic)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.own.property('message'); 
+          expect(data).to.be.an('array').with.length(3);
+          expect(data.filter(topic => topic.topicName === 'Test Topic Name')).to.be.length(0);
+        });
+    });
+
+  });
+  describe('/POST /comments routes', function () {
+    it('should return an array of comments within a specific topic /community/comments', function (){
+      const communityId= '100000000000000000000001';
+      const topicId= '200000000000000000000001';
+      return Promise.all([
+        Thread.find({community: communityId, 'topic': topicId}),
+        chai.request(app).post('/community/comments').set('Authorization', `Bearer ${token}`).send({topicId})
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.length(data.length);
+        });
+    });
+
+    it('should return an error without specifying topic /community/comments', function (){
+      const communityId= '100000000000000000000001';
+      const topicId= '200000000000000000000001';
+      const brokenttopicId= '';
+      return Promise.all([
+        Thread.find({community: communityId, 'topic': topicId}),
+        chai.request(app).post('/community/comments').set('Authorization', `Bearer ${token}`).send({brokenttopicId})
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('message');
+        });
+    });
+
+    it('should create a comment associated with the specific topic without replyTo /community/comments/post', function (){
+      
+      const topicId = '200000000000000000000001';
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'Test Comment',
+        user: '000000000000000000000001'
+      };
+      
+      return Promise.all([
+        Thread.find({'topic': topicId}),
+        chai.request(app).post('/community/comments/post').set('Authorization', `Bearer ${token}`).send(newComment)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+        });
+    });
+
+    it('should create a comment associated with the specific topic with replyTo /community/comments/post', function (){
+      
+      const topicId = '200000000000000000000001';
+      const newComment = {
+        community: '100000000000000000000001', 
+        topic: '200000000000000000000001', 
+        comment: 'Test Comment',
+        user: '000000000000000000000001',
+        replyTo: '300000000000000000000001'
+      };
+      
+      return Promise.all([
+        Thread.find({'topic': topicId}),
+        chai.request(app).post('/community/comments/post').set('Authorization', `Bearer ${token}`).send(newComment)
+      ])
+        .then(function([data,res]) {
+          expect(res).to.be.json;
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+        });
+    });
+
+  });
+  
 
 });
