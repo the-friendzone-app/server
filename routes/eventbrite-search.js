@@ -13,6 +13,19 @@ router.use(jwtAuth);
 
 router.put('/', jwtAuth, (req, res, next) => {
   const { latitude, longitude, search, searchDistance, price, categories, formats, startTime, endTime } = req.body;
+
+  if (!latitude) {
+    const err = new Error('Missing `latitude` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!longitude) {
+    const err = new Error('Missing `longitude` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
   request({
     method: 'GET',
     url: `https://www.eventbriteapi.com/v3/events/search?q=${search}&location.latitude=${latitude}&location.longitude=${longitude}&location.within=${searchDistance}&price=${price}&categories=${categories}&formats=${formats}&start_date.range_start=${startTime}&start_date.range_end=${endTime}`,

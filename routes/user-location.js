@@ -24,6 +24,30 @@ router.put('/', jwtAuth, (req, res, next) => {
   let { location, latitude, longitude, userId } = req.body;
   const updateLocation = { location, latitude, longitude, userId };
 
+  if (!userId) {
+    const err = new Error('Missing `userId` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!latitude) {
+    const err = new Error('Missing `latitude` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!longitude) {
+    const err = new Error('Missing `longitude` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!location) {
+    const err = new Error('Missing `location` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
   UserLocation.findOneAndUpdate({ userId: req.user._id }, updateLocation, { new: true, upsert: true })
     .then(result => {
       res.location(`${req.baseUrl}/${result.id}`).status(201).json(result);
