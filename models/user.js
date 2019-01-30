@@ -13,11 +13,11 @@ const userSchema = new mongoose.Schema({
   userVerificationCode: { type: String },
   email: { type: String, unique: true },
   verified: { type: Boolean, default: false },
-  marked: {type: Boolean, default: false},
+  marked: { type: Boolean, default: false },
   introQuizCompleted: { type: Boolean, default: false },
   introQuizQuestions: [
     {
-      questionID: {type: mongoose.Schema.Types.ObjectId, ref: Quiz},
+      questionID: { type: mongoose.Schema.Types.ObjectId, ref: Quiz },
       userAnswer: String
     }
   ],
