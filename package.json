@@ -1,7 +1,7 @@
 {
-  "name": "The Friend Zone Client",
+  "name": "The-Friend-Zone-Server",
   "version": "1.0.0",
-  "description": "Client for The Friend Zone",
+  "description": "Server for The Friend Zone",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
