@@ -126,23 +126,23 @@ router.put('/suggested/:id', (req, res, next) => {
 
               User.findOne({ _id: suggestedList[key]._id })
                 .then(user => {
-                  console.log('********USER*****', user.username, '********************');
+                  // console.log('********USER*****', user.username, '********************');
                   //is there anything in suggested
                   //NEED TO STILL CREATE SUGGESTED IF USER NOT IN SUGGESTED LIST 
                   if ((_user.suggested && _user.suggested.length)) { //if user has nothing in suggested
                     if ((user.suggested && user.suggested.length)) { //if suggested user has nothing in suggested
-                      console.log('_user.suggested', _user.suggested);
-                      console.log('user._Id', user._id);
-                      console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+                      // console.log('_user.suggested', _user.suggested);
+                      // console.log('user._Id', user._id);
+                      // console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
 
                       let userSuggested = _user.suggested.filter(suggest => String(suggest._id) === String(user._id));
-                      console.log(userSuggested);
+                      // console.log(userSuggested);
                       if (userSuggested && userSuggested.length) {
-                        console.log('user is already in suggested');
+                        // console.log('user is already in suggested');
                         return;
 
                       } else {
-                        console.log('IT DOESNT EXIST');
+                        // console.log('IT DOESNT EXIST');
                         Schat.create({ suggested: [user._id, _user._id] }).then(
                           chat => {
                             let chatroom = chat._id;
@@ -163,7 +163,7 @@ router.put('/suggested/:id', (req, res, next) => {
                         );
                       }
                     } else {
-                      console.log('hit create new suggested and Schat');
+                      // console.log('hit create new suggested and Schat');
                       Schat.create({ suggested: [user._id, _user._id] }).then(
                         chat => {
                           let chatroom = chat._id;
@@ -184,7 +184,7 @@ router.put('/suggested/:id', (req, res, next) => {
                       );
                     }
                   } else {
-                    console.log('NEW USER, create schats');
+                    // console.log('NEW USER, create schats');
                     Schat.create({ suggested: [user._id, _user._id] }).then(
                       chat => {
                         let chatroom = chat._id;
@@ -206,7 +206,7 @@ router.put('/suggested/:id', (req, res, next) => {
                 });
             }
           }
-          console.log('user suggested is fine');
+          // console.log('user suggested is fine');
           return;
         });
 
