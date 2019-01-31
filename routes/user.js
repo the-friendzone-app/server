@@ -12,7 +12,11 @@ function validateNewUser(req, res, next) {
   const { email, username, password } = req.body;
 
   let err;
+
   if (!email) {
+
+  if(!email){
+
     err = new Error('Username is required');
     err.location = 'username';
     err.code = 400;
@@ -64,9 +68,11 @@ router.post('/', validateNewUser, (req, res, next) => {
     .then(_hashedPassword => {
       hashedPassword = _hashedPassword;
 
+ 
       hashedUsername = User.hashUsername();
 
       verificationCode = User.createVerificationCode();
+    
 
       return { hashedPassword, hashedUsername, verificationCode };
     })
