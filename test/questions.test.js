@@ -140,24 +140,39 @@ describe('The Friend Zone Questions Router', function () {
         });
     });
 
+
+
     it('returns personality poll by category /personality-polls/:category', function(){
-      let questionId = '500000000000000000000001';
-      let userId = '000000000000000000000001'; 
-      let chaiRes;
-      const modifiedAnswer = 'I would close the chat'.replace(/ /gi, '%20');
+      let category = 'mvp1';
       
-      return chai.request(app).get(`/questions/user-answered/${questionId}/${modifiedAnswer}`).set('Authorization', `Bearer ${token}`)
-        .then((res) => {
-          chaiRes = res;
-          return User.findOne({_id: userId });
-        })
-        .then((data)=> {
-          expect(chaiRes).to.have.status(200);
-          expect(chaiRes).to.be.json;
-          expect(chaiRes.body).to.be.a('array');
-          expect(chaiRes.body[0]).to.have.own.property('questionID');
-          expect(chaiRes.body[0]).to.have.own.property('userAnswer');
-          expect(data.marked).to.equal(true);
+      return Promise.all([
+        Questions.findOne({category}),
+        chai.request(app).get(`/questions/personality-polls/${category}`).set('Authorization', `Bearer ${token}`)
+      ])
+        .then(([data, res])=> {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.own.property('questionText', 'What would you do if your friend stole from you?');
+          expect(res.body).to.have.own.property('category', category);
+          expect(res.body).to.have.own.property('active', true);
+        });
+    });
+
+    it('returns an error if no catego /personality-polls/:category', function(){
+      let category = 'givemethequiz';
+      
+      return Promise.all([
+        Questions.findOne({category}),
+        chai.request(app).get(`/questions/personality-polls/${category}`).set('Authorization', `Bearer ${token}`)
+      ])
+        .then(([data, res])=> {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.own.property('questionText', 'What would you do if your friend stole from you?');
+          expect(res.body).to.have.own.property('category', category);
+          expect(res.body).to.have.own.property('active', true);
         });
     });
 
