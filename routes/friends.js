@@ -12,27 +12,6 @@ const Schat = require('../models/schat');
 
 const router = express.Router();
 
-// const jwtAuth = passport.authenticate('jwt', {
-//     session: false,
-//     failWithError: true
-// });
-// router.use(jwtAuth);
-//returns users friends
-router.get('/:id', (req, res, next) => {
-  let { id } = req.params;
-  User.find({ _id: id }).populate({
-    path: 'friends',
-    select: 'username'
-  })
-    .then(user => {
-      const { friends } = user[0];
-      //console.log(friends);
-      res.json(friends);
-
-    })
-    .catch(err => next(err));
-});
-
 router.get('/friended/:id', (req, res, next) => {
   let { id } = req.params;
   // console.log(id);
@@ -69,7 +48,7 @@ router.get('/schat/:id', (req, res, next) => {
     .populate({ path: 'suggested._id', select: ['hashedUsername', 'username'] })
     .populate({ path: 'suggested.chatroom', select: '_id' })
     .then(suggested => {
-      // console.log(suggested);
+      console.log(suggested.suggested);
       res.json(suggested);
 
     })
@@ -141,106 +120,113 @@ router.put('/suggested/:id', (req, res, next) => {
       return User.findOne({ _id: id })
         .then(user => {
           _user = user;
-          // console.log('_user', _user);
-          for (let key in suggestedList) {
-            // User.findOne({ _id: id })
-            //   .then(user => {
-            //console.log(user); === samwise
+          if (suggestedList.length !== _user.suggested.length) {
+            console.log('_user', _user);
+            for (let key in suggestedList) {
+              // User.findOne({ _id: id })
+              //   .then(user => {
+              //console.log(user); === samwise
 
-            User.findOne({ _id: suggestedList[key]._id })
-              .then(user => {
-                console.log('********USER*****', user.username, '********************');
-                //is there anything in suggested
-                //NEED TO STILL CREATE SUGGESTED IF USER NOT IN SUGGESTED LIST 
-                if ((user.suggested && user.suggested.length)) {
-                  //checks if user already has instance of chat
-                  // console.log(user.suggested.length);
-                  // console.log('user.suggested.length', user.suggested.length);
-                  // console.log('_user.suggested.length', _user.suggested.length);
-                  for (let i = 0; i < user.suggested.length; i++) {
-                    for (let j = 0; j < _user.suggested.length; j++) {
-                      console.log('user.suggested[i]._id', user.suggested[i]._id);
-                      console.log('_user.suggested[j]._id', _user.suggested[j]._id);
-                      console.log('id', id);
-                      console.log('user._id', user._id);
-                      console.log('String(user.suggested[i]._id) === String(id)', String(user.suggested[i]._id) === String(id));
-                      console.log('String(_user.suggested[j]._id) === String(user._id)', String(_user.suggested[j]._id) === String(user._id));
-                      console.log('String(_user.suggested[j]._id) === String(user.suggested[i]._id))', String(_user.suggested[j]._id) === String(user.suggested[i]._id));
-                      console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
-                      if ((String(user.suggested[i]._id) !== String(id)) && (String(_user.suggested[j]._id) !== String(user._id)) && (String(_user.suggested[j]._id) !== String(user.suggested[i]._id))) {
-                        //removes user self from list 
+              User.findOne({ _id: suggestedList[key]._id })
+                .then(user => {
+                  console.log('********USER*****', user.username, '********************');
+                  //is there anything in suggested
+                  //NEED TO STILL CREATE SUGGESTED IF USER NOT IN SUGGESTED LIST 
+                  if ((_user.suggested && _user.suggested.length)) { //if user has nothing in suggested
+                    if ((user.suggested && user.suggested.length)) { //if suggested user has nothing in suggested
+                      //checks if user already has instance of chat
+                      // console.log(user.suggested.length);
+                      // console.log('user.suggested.length', user.suggested.length);
+                      // console.log('_user.suggested.length', _user.suggested.length);
+                      for (let i = 0; i < _user.suggested.length; i++) {
+                        for (let j = 0; j < user.suggested.length; j++) {
+                          console.log('user.suggested[i]._id', user.suggested[j]._id);
+                          console.log('_user.suggested[j]._id', _user.suggested[i]._id);
+                          console.log('id', id);
+                          console.log('user._id', user._id);
+                          console.log('String(user.suggested[j]._id) === String(id)', String(user.suggested[j]._id) === String(id));
+                          console.log('String(_user.suggested[i]._id) === String(user._id)', String(_user.suggested[i]._id) === String(user._id));
+                          console.log('String(_user.suggested[i]._id) === String(user.suggested[j]._id))', String(_user.suggested[i]._id) === String(user.suggested[j]._id));
+                          console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
 
-                        Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
-                          chat => {
-                            let chatroom = chat._id;
-                            _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
-                            user.suggested.push({ _id: _user._id, chatroom });
-
-                            return Promise.all([
-                              User.findOneAndUpdate(
-                                { _id: _user._id },
-                                { suggested: _user.suggested }
-                              ),
-                              User.findOneAndUpdate(
-                                { _id: suggestedList[key]._id },
-                                { suggested: user.suggested }
-                              )
-                            ]);
+                          if (String(_user.suggested[i]._id) === String(user._id)) {
+                            console.log('user is already suggested');
+                            return;
                           }
-                        );
+                          else {
+                            Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                              chat => {
+                                let chatroom = chat._id;
+                                _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                                user.suggested.push({ _id: _user._id, chatroom });
 
-                      }
-                      else if (String(_user.suggested[j]._id) === String(user.suggested[i]._id)) {
-                        Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
-                          chat => {
-                            let chatroom = chat._id;
-                            _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
-                            user.suggested.push({ _id: _user._id, chatroom });
-
-                            return Promise.all([
-                              User.findOneAndUpdate(
-                                { _id: _user._id },
-                                { suggested: _user.suggested }
-                              ),
-                              User.findOneAndUpdate(
-                                { _id: suggestedList[key]._id },
-                                { suggested: user.suggested }
-                              )
-                            ]);
+                                return Promise.all([
+                                  User.findOneAndUpdate(
+                                    { _id: _user._id },
+                                    { suggested: _user.suggested }
+                                  ),
+                                  User.findOneAndUpdate(
+                                    { _id: suggestedList[key]._id },
+                                    { suggested: user.suggested }
+                                  )
+                                ]);
+                              }
+                            );
                           }
-                        );
+                        }
+
                       }
-                      else {
-                        console.log('user is already suggested');
-                        return;
-                      }
+                    } else {
+                      console.log('hit create new suggested and Schat');
+                      Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                        chat => {
+                          let chatroom = chat._id;
+                          _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                          user.suggested.push({ _id: _user._id, chatroom });
+
+                          return Promise.all([
+                            User.findOneAndUpdate(
+                              { _id: _user._id },
+                              { suggested: _user.suggested }
+                            ),
+                            User.findOneAndUpdate(
+                              { _id: suggestedList[key]._id },
+                              { suggested: user.suggested }
+                            )
+                          ]);
+                        }
+                      );
                     }
+                  } else {
+                    console.log('NEW USER, create schats');
+                    Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                      chat => {
+                        let chatroom = chat._id;
+                        _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                        user.suggested.push({ _id: _user._id, chatroom });
 
+                        return Promise.all([
+                          User.findOneAndUpdate(
+                            { _id: _user._id },
+                            { suggested: _user.suggested }
+                          ),
+                          User.findOneAndUpdate(
+                            { _id: suggestedList[key]._id },
+                            { suggested: user.suggested }
+                          )
+                        ]);
+                      }
+                    );
                   }
-                } else {
-                  console.log('hit create new suggested and Schat');
-                  Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
-                    chat => {
-                      let chatroom = chat._id;
-                      _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
-                      user.suggested.push({ _id: _user._id, chatroom });
 
-                      return Promise.all([
-                        User.findOneAndUpdate(
-                          { _id: _user._id },
-                          { suggested: _user.suggested }
-                        ),
-                        User.findOneAndUpdate(
-                          { _id: suggestedList[key]._id },
-                          { suggested: user.suggested }
-                        )
-                      ]);
-                    }
-                  );
-                }
-              });
+
+                });
+            }
           }
+          console.log('user sugegsted is fine');
+          return;
         });
+
     })
     .then(() => res.sendStatus(204))
     .catch(err => next(err));

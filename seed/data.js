@@ -60,8 +60,8 @@ const users = [
     'username': 'gollum',
     'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
     'profile': {
-      selfType: 'listener',
-      preferenceType: 'talker'
+      selfType: 'both',
+      preferenceType: 'both'
     },
     'verified': false,
     'introQuizCompleted': false,
@@ -80,26 +80,26 @@ const users = [
 
     ]
   },
-  {
-    '_id': '333333333333333333333304',
-    'username': 'sauron',
-    'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
-    'profile': {
-      selfType: 'both',
-      preferenceType: 'both'
-    },
-    'verified': false,
-    'introQuizCompleted': false,
-    'hashedUsername': 'Awesome-Dragon84669',
-    'userVerificationCode': '9sdsadfa',
-    // 'friends': [
-    // ],
-    'friended': [
-    ],
-    'suggested': [
+  // {
+  //   '_id': '333333333333333333333304',
+  //   'username': 'sauron',
+  //   'password': '$2a$10$LbiweBXBNRqH6hvrO5Zgl.8lnwnSD6.nGqrWUcs0LuzZ.NTwN2j4u',
+  //   'profile': {
+  //     selfType: 'both',
+  //     preferenceType: 'both'
+  //   },
+  //   'verified': false,
+  //   'introQuizCompleted': false,
+  //   'hashedUsername': 'Awesome-Dragon84669',
+  //   'userVerificationCode': '9sdsadfa',
+  //   // 'friends': [
+  //   // ],
+  //   'friended': [
+  //   ],
+  //   'suggested': [
 
-    ]
-  }
+  //   ]
+  // }
 ];
 
 const chat = [
