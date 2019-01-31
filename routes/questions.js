@@ -35,9 +35,9 @@ router.get('/intro-quiz', jwtAuth, (req, res, next) => {
 });
 
 router.get('/user-answered/:questionId/:answer', jwtAuth, (req, res, next) => {
-    console.log('here', req.user._id);
-    console.log('questionId', req.params.questionId);
-    console.log('answer', req.params.answer);
+    // console.log('here', req.user._id);
+    // console.log('questionId', req.params.questionId);
+    // console.log('answer', req.params.answer);
 
     Quiz.findOne({ _id: req.params.questionId })
         .then((result) => {
