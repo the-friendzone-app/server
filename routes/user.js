@@ -4,6 +4,14 @@ const express = require('express');
 const faker = require('faker');
 const User = require('../models/user');
 const router = express.Router();
+const passport = require('passport');
+
+const jwtAuth = passport.authenticate('jwt', {
+  session: false,
+  failWithError: true
+});
+
+//router.use(jwtAuth);
 
 function validateNewUser(req, res, next) {
   const { email, username, password } = req.body;
@@ -98,6 +106,11 @@ router.post('/', validateNewUser, (req, res, next) => {
         next(error);
       }
     });
+});
+
+router.get('/info', jwtAuth, (req,res)=>{
+  User.findOne({_id:req.user._id})
+    .then((user)=>res.send(user));
 });
 router.get('/:id', (req, res) => {
   let { id } = req.params;

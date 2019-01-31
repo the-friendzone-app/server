@@ -106,8 +106,8 @@ router.get('/feedback', jwtAuth, (req, res, next) => {
 
     User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'introQuizCompleted': true } }, { new: true })
     .then(user => {
-    res.json(user);
-     return user.save();
+        //user.save();
+       return res.json(user);
         })
 
     .catch(err => {
