@@ -1,7 +1,8 @@
 'use strict';
 const quizQuestions=[
 
-{
+{   
+    _id: '500000000000000000000001',
     questionText: 'What would you do if someone you were chatting with triggered you?',
     option1: 'I would close the chat',
     option2: 'I would tell them I respectfully disagree',
@@ -11,9 +12,9 @@ const quizQuestions=[
     trapdoor: 'I would tell them to kill themselves',
     category: 'intro',
     active: true
-  
 },
 {
+    _id: '500000000000000000000002',
     questionText: 'What would you do if you went to a Friend Zone Meetup and you found one of the attendees to be attractive?',
     option1: 'I would try to get to know them better outside of the app',
     option2: 'I would ignore my feelings towards them',
@@ -26,6 +27,7 @@ const quizQuestions=[
    
 },
 {
+    _id: '500000000000000000000003',
     questionText: 'What would you do if you found out private information about someone you were chatting with?',
     option1: 'Blackmail time, baby!',
     option2: 'Keep their information private and not mention it to anyone',
@@ -40,4 +42,4 @@ const quizQuestions=[
 ]
 
 
-module.exports = quizQuestions;
+module.exports = {quizQuestions};

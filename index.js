@@ -49,6 +49,7 @@ passport.use(jwtStrategy);
 
 app.use('/auth', authRouter);
 app.use('/community', communityRouter);
+app.use('/friends', jwtAuth);
 app.use('/friends', friendsRouter);
 app.use('/meetups', meetupsRouter);
 app.use('/questions', questionsRouter);
