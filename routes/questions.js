@@ -7,130 +7,124 @@ const Questions = require('../models/question');
 const Quiz = require('../models/quiz');
 const User = require('../models/user');
 
-// const jsonParser = bodyParser.json
 
 const router = express.Router();
 
 const jwtAuth = passport.authenticate('jwt', {
-    session: false,
-    failWithError: true
+  session: false,
+  failWithError: true
 });
 
 router.use(jwtAuth);
+
 // Fetch Intro Quiz
 router.get('/intro-quiz', jwtAuth, (req, res, next) => {
-    Quiz.find({
-        category: 'intro',
-        active: true
+  Quiz.find({
+    category: 'intro',
+    active: true
+  })
+    .then(results => {
+      res.json({
+        questions: results,
+        answered: req.user.introQuizQuestions
+      });
     })
-        .then(results => {
-            res.json({
-                questions: results,
-                answered: req.user.introQuizQuestions
-            });
-        })
-        .catch(err => {
-            next(err);
-        })
+    .catch(err => {
+      next(err);
+    });
 });
 
 router.get('/user-answered/:questionId/:answer', jwtAuth, (req, res, next) => {
-    console.log('here', req.user._id);
-    console.log('questionId', req.params.questionId);
-    console.log('answer', req.params.answer);
 
-    Quiz.findOne({ _id: req.params.questionId })
-        .then((result) => {
-            if (req.params.answer === result.trapdoor) {
-                console.log('BAdANSWER!');
-                return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true }}, { new: true })
-                    .then(user => {
-                        console.log(user.password);
-                        user.introQuizQuestions.push({
-                            questionID: req.params.questionId,
-                            userAnswer: req.params.answer
-                        });
-                        return user.save();
-                    })
-                    .then((newUser) => res.send(newUser.introQuizQuestions));
-            } else {
-                console.log('Good Answer!');
-                return User.findOne({
-                    _id: req.user._id
-                })
-                    .then(user => {
-                        // console.log(user);
-                        user.introQuizQuestions.push({
-                            questionID: req.params.questionId,
-                            userAnswer: req.params.answer
-                        });
-                        return user.save();
-                    })
-                    .then((newUser) => res.send(newUser.introQuizQuestions));
-            }
+  Quiz.findOne({ _id: req.params.questionId })
+    .then((result) => {
+      if (req.params.answer === result.trapdoor) {
+        return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true} }, { new: true })
+          .then(user => {
+            user.introQuizQuestions.push({
+              questionID: req.params.questionId,
+              userAnswer: req.params.answer
+            });
+            return user.save();
+          })
+          .then((newUser) => res.send(newUser.introQuizQuestions));
+      } else {
+        return User.findOne({
+          _id: req.user._id
         })
-        .catch(err => {
-            console.error(err);
-            next(err);
-        });
+          .then(user => {
+            user.introQuizQuestions.push({
+              questionID: req.params.questionId,
+              userAnswer: req.params.answer
+            });
+            return user.save();
+          })
+          .then((newUser) => res.send(newUser.introQuizQuestions));
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      next(err);
+    });
 
 });
 
 
 //Fetch Dynamic personality-poll categories
 router.get('/personality-polls/:category', jwtAuth, (req, res, next) => {
-    Questions.findOne({
-        category: req.params.category
+    
+  Questions.findOne({category: req.params.category})
+    .then(results => {
+      res.json(results);
     })
-        .then(results => {
-            res.json(results);
-        })
-        .catch(err => {
-            next(err);
-        })
-})
+    .catch(err => {
+      next(err);
+    });
+});
+
 //get all active poll questions
 router.get('/personality-polls', jwtAuth, (req, res, next) => {
-    Questions.find({
-        active: true
+  Questions.find({
+    active: true
+  })
+    .then(results => {
+      res.json(results);
     })
-        .then(results => {
-            res.json(results);
-        })
-        .catch(err => {
-            next(err);
-        })
-})
+    .catch(err => {
+      next(err);
+    });
+});
 
 router.get('/feedback', jwtAuth, (req, res, next) => {
 
-    User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'introQuizCompleted': true } }, { new: true })
+  User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'introQuizCompleted': true } }, { new: true })
     .then(user => {
         //user.save();
        return res.json(user);
         })
 
     .catch(err => {
-        console.error(err);
-        next(err);
+      console.error(err);
+      next(err);
     });
   
-  });
+});
 
 
-  router.get('/send-verification', jwtAuth, (req, res, next) => {
-    let { id } = req.params;
-      User.findById(id)
-          .then(user => {
-              res.json({
-                  verificationCode: user.verificationCode,
+// planned for V2
+//   router.get('/send-verification', jwtAuth, (req, res, next) => {
+//     let { id } = req.params;
+//       User.findById(id)
+//           .then(user => {
+//               res.json({
+//                   verificationCode: user.verificationCode,
       
-              });
-          })
-          .catch(err => {
-              next(err);
-          })
-    });
+//               });
+//           })
+//           .catch(err => {
+//               next(err);
+//           })
+//     });
     
 
 // router.post('/', (req, res, next) => {
