@@ -123,7 +123,7 @@ describe('The Friend Zone Questions Router', function () {
       let questionId = '500000000000000000000001';
       let userId = '000000000000000000000001'; 
       let chaiRes;
-      const modifiedAnswer = 'I would close the chat'.replace(/ /gi, '%20');
+      const modifiedAnswer = 'I would tell them to kill themselves'.replace(/ /gi, '%20');
       
       return chai.request(app).get(`/questions/user-answered/${questionId}/${modifiedAnswer}`).set('Authorization', `Bearer ${token}`)
         .then((res) => {
@@ -159,20 +159,47 @@ describe('The Friend Zone Questions Router', function () {
         });
     });
 
-    it('returns an error if no catego /personality-polls/:category', function(){
+    it('returns an empty response if fake category /personality-polls/:category', function(){
       let category = 'givemethequiz';
       
       return Promise.all([
-        Questions.findOne({category}),
+        Questions.findOne({category: category}),
         chai.request(app).get(`/questions/personality-polls/${category}`).set('Authorization', `Bearer ${token}`)
       ])
         .then(([data, res])=> {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.have.own.property('questionText', 'What would you do if your friend stole from you?');
-          expect(res.body).to.have.own.property('category', category);
-          expect(res.body).to.have.own.property('active', true);
+          expect(res.body).to.equal(null);
+        });
+    });
+
+    it('returns all active poll questions /personality-polls', function(){
+  
+      return Promise.all([
+        Questions.find({active: true}),
+        chai.request(app).get('/questions/personality-polls').set('Authorization', `Bearer ${token}`)
+      ])
+        .then(([data, res])=> {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body.length).to.equal(data.length);
+        });
+    });
+
+    it('returns user with "introQuizCompleted" updated to true /feedback', function(){
+      let userId = '000000000000000000000001'; 
+      let chaiRes;
+      return chai.request(app).get('/questions/feedback').set('Authorization', `Bearer ${token}`)
+        .then((res) => {
+          chaiRes = res;
+          return User.findOne({_id: userId});
+        })
+        .then((data)=> {
+          expect(chaiRes).to.have.status(200);
+          expect(chaiRes).to.be.json;
+          expect(chaiRes.body).to.be.a('object');
+          expect(chaiRes.body).to.have.own.property('introQuizCompleted', true);
         });
     });
 
