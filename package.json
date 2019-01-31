@@ -1,4 +1,3 @@
-{
   "name": "The-Friend-Zone-Server",
   "version": "1.0.0",
   "description": "Server for The Friend Zone",
@@ -12,7 +11,7 @@
     "heroku": "node index.js",
     "travis": "npm run mocha"
   },
-  "author": "The Friend Zone Dev Team<thefriendzonedev@gmail.com>",
+  "author": "The Friend Zonem Dev Team<thefriendzonedev@gmail.com>",
   "license": "Open",
   "dependencies": {
     "bcryptjs": "^2.4.3",

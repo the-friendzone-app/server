@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const topicSchema = mongoose.Schema({
   topicName: {type: String, required: true},
   creator: { type:  mongoose.Schema.Types.ObjectId, ref: 'User' },
-  description: {type: String},
+  description: {type: String, required: true},
   tags: [{type:String}],
   comments: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Thread'}],
   community: { type:  mongoose.Schema.Types.ObjectId, ref: 'Community'}
