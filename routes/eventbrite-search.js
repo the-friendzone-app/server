@@ -24,7 +24,7 @@ router.put('/', jwtAuth, (req, res, next) => {
     const err = new Error('Missing `longitude` in request body');
     err.status = 400;
     return next(err);
-  }
+  } 
 
   request({
     method: 'GET',
