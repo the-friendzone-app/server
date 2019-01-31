@@ -1,5 +1,4 @@
-{
-  "name": "the-friend-zone-server",
+  "name": "The-Friend-Zone-Server",
   "version": "1.0.0",
   "description": "Server for The Friend Zone",
   "main": "index.js",
