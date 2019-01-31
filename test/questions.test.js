@@ -25,6 +25,7 @@ describe('The Friend Zone Questions Router', function () {
   let users = [{
     _id:'000000000000000000000001',
     username: 'example',
+    email: 'example@example.com',
     password: '$2a$10$XaJlI7ja3uNVmJzilSdZM.lBrJrJTin8sP6EgTcE/9y46KTIpOfEy'
   }];
 
@@ -64,7 +65,7 @@ describe('The Friend Zone Questions Router', function () {
     return mongoose.disconnect();
   });
 
-  describe.only('GET /questions routes', function(){
+  describe('GET /questions routes', function(){
     it('returns the intro quiz /questions/intro-quiz', function(){
       return Promise.all([
         Quiz.find({category: 'intro', active: true}),

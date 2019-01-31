@@ -27,7 +27,8 @@ describe('The Friend Zone Community Router', function () {
   let users = [{
     _id:'000000000000000000000001',
     username: 'example',
-    password: '$2a$10$XaJlI7ja3uNVmJzilSdZM.lBrJrJTin8sP6EgTcE/9y46KTIpOfEy'
+    password: '$2a$10$XaJlI7ja3uNVmJzilSdZM.lBrJrJTin8sP6EgTcE/9y46KTIpOfEy',
+    email: 'example@example.com'
   }];
 
   let user;
