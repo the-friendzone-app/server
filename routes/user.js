@@ -9,10 +9,15 @@ const router = express.Router();
 
 
 function validateNewUser(req, res, next) {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   let err;
-  if (!username) {
+  if (!email) {
+    err = new Error('Username is required');
+    err.location = 'username';
+    err.code = 400;
+  }
+  else if (!username) {
     err = new Error('Username is required');
     err.location = 'username';
     err.code = 400;
@@ -52,23 +57,22 @@ router.post('/', validateNewUser, (req, res, next) => {
   console.log('post attempting...')
   // username = username.trim();
 
-  const { username, password, selfType, preferenceType } = req.body;
+  const { email, username, password, selfType, preferenceType } = req.body;
   console.log(req.body)
   let hashedPassword, hashedUsername, verificationCode;
   return User.hashPassword(password)
     .then(_hashedPassword => {
       hashedPassword = _hashedPassword;
-      console.log('hashedpassword', hashedPassword)
-      console.log('nextstep')
+
       hashedUsername = User.hashUsername();
-      console.log('third step')
-      console.log('hashedusername', hashedUsername)
+
       verificationCode = User.createVerificationCode();
-      console.log('verification', verificationCode)
+
       return { hashedPassword, hashedUsername, verificationCode };
     })
     .then(({ hashedPassword, hashedUsername, verificationCode, introQuizQuestions }) => {
       return User.create({
+        email: email,
         username: username,
         hashedUsername: hashedUsername,
         password: hashedPassword,
@@ -77,7 +81,7 @@ router.post('/', validateNewUser, (req, res, next) => {
         "profile.preferenceType": preferenceType,
       });
     })
-    
+
     .then(user => {
       return res
         .status(201)

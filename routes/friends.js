@@ -123,9 +123,6 @@ router.put('/suggested/:id', (req, res, next) => {
           if (suggestedList.length !== _user.suggested.length) {
             // console.log('_user', _user);
             for (let key in suggestedList) {
-              // User.findOne({ _id: id })
-              //   .then(user => {
-              //console.log(user); === samwise
 
               User.findOne({ _id: suggestedList[key]._id })
                 .then(user => {
@@ -146,63 +143,62 @@ router.put('/suggested/:id', (req, res, next) => {
 
                       } else {
                         console.log('IT DOESNT EXIST');
-                        Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                        Schat.create({ suggested: [user._id, _user._id] }).then(
                           chat => {
                             let chatroom = chat._id;
-                            _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                            _user.suggested.push({ _id: user._id, chatroom });
                             user.suggested.push({ _id: _user._id, chatroom });
 
                             return Promise.all([
                               User.findOneAndUpdate(
                                 { _id: _user._id },
                                 { suggested: _user.suggested }
-                              ),
+                              ).exec(),
                               User.findOneAndUpdate(
-                                { _id: suggestedList[key]._id },
+                                { _id: user._id },
                                 { suggested: user.suggested }
-                              )
+                              ).exec()
                             ]);
                           }
                         );
                       }
                     } else {
                       console.log('hit create new suggested and Schat');
-                      Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                      Schat.create({ suggested: [user._id, _user._id] }).then(
                         chat => {
                           let chatroom = chat._id;
-                          _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                          _user.suggested.push({ _id: user._id, chatroom });
                           user.suggested.push({ _id: _user._id, chatroom });
 
                           return Promise.all([
                             User.findOneAndUpdate(
                               { _id: _user._id },
                               { suggested: _user.suggested }
-                            ),
+                            ).exec(),
                             User.findOneAndUpdate(
-                              { _id: suggestedList[key]._id },
+                              { _id: user._id },
                               { suggested: user.suggested }
-                            )
+                            ).exec()
                           ]);
                         }
                       );
                     }
                   } else {
                     console.log('NEW USER, create schats');
-                    Schat.create({ suggested: [suggestedList[key]._id, _user._id] }).then(
+                    Schat.create({ suggested: [user._id, _user._id] }).then(
                       chat => {
                         let chatroom = chat._id;
-                        _user.suggested.push({ _id: suggestedList[key]._id, chatroom });
+                        _user.suggested.push({ _id: user._id, chatroom });
                         user.suggested.push({ _id: _user._id, chatroom });
-
                         return Promise.all([
                           User.findOneAndUpdate(
                             { _id: _user._id },
                             { suggested: _user.suggested }
-                          ),
+                          ).exec(),
                           User.findOneAndUpdate(
-                            { _id: suggestedList[key]._id },
+                            { _id: user._id },
                             { suggested: user.suggested }
-                          )
+                          ).exec()
                         ]);
                       }
                     );
