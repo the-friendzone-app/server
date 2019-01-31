@@ -7,11 +7,11 @@ const Quiz = require('./quiz');
 
 const userSchema = new mongoose.Schema({
 
+  email: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   hashedUsername: { type: String },
   password: { type: String, required: true },
   userVerificationCode: { type: String },
-  email: { type: String, unique: true },
   verified: { type: Boolean, default: false },
   marked: {type: Boolean, default: false},
   introQuizCompleted: { type: Boolean, default: false },
