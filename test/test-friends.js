@@ -168,13 +168,14 @@ const schat = [
   }
 ];
 
-describe('friends endpoint', function () {
+describe('friends, chat and ignore endpoints', function () {
   let user;
   let auth;
   let user2;
   let auth2;
   let user3;
   let auth3;
+  let chat;
 
   before(function () {
     return mongoose.connect(TEST_DATABASE_URL)
@@ -191,7 +192,8 @@ describe('friends endpoint', function () {
       Chat.insertMany(chat),
       Schat.insertMany(schat)
     ])
-      .then(([users]) => {
+      .then(([users, chat]) => {
+        chat = chat[0];
         user = users.find(user => user.username === 'samwise');
         auth = jwt.sign({ user: { username: user.username, id: user._id } }, JWT_SECRET, { subject: user.username });
         user2 = users.find(user => user.username === 'frodo');
@@ -216,7 +218,7 @@ describe('friends endpoint', function () {
           });
       });
       it('no access if invalid token', function () {
-        const token = jwt.sign(
+        const auth = jwt.sign(
           {
             username: user.username,
             id: user._id
@@ -230,7 +232,7 @@ describe('friends endpoint', function () {
         return chai
           .request(app)
           .get(`/friends/friended/${user._id}`)
-          .set('Authorization', `Bearer ${token}`)
+          .set('Authorization', `Bearer ${auth}`)
           .then((res) => {
             expect(res).to.have.status(401);
           });
@@ -274,7 +276,6 @@ describe('friends endpoint', function () {
           });
       });
     });
-
     describe('GET /friends/schat/:id', function () {
       it('retrieve all schats', function () {
         return chai
@@ -299,7 +300,6 @@ describe('friends endpoint', function () {
           });
       });
     });
-
     describe('PUT /suggested/:id', function () {
       it('suggested should match', function () {
         return chai
@@ -328,8 +328,181 @@ describe('friends endpoint', function () {
           });
       });
     });
+    describe('PUT /addfriend/', function () {
+      it('should add friends to each other', function () {
+        return chai
+          .request(app)
+          .put(`/friends/addfriend/${user._id}/${user3._id}`)
+          .set('Authorization', `Bearer ${auth}`)
+          .then(res => {
+            expect(res).to.have.status(204);
+            return User.findOne({ _id: user._id });
+          })
+          .then(_user => {
+            expect(_user.sentRequest).to.include(user3._id);
+            return User.findOne({ _id: user3._id });
+          })
+          .then(_user => {
+            expect(_user.recievedRequest).to.include(user._id);
+          });
+      });
+      it('should console log user is already friend', function () {
+        it('should add friends to each other', function () {
+          return chai
+            .request(app)
+            .put(`/friends/addfriend/${user._id}/${user2._id}`)
+            .set('Authorization', `Bearer ${auth}`)
+            .then(res => {
+              expect(res).to.have.status(204);
+            })
+            .then(_user => {
+              return User.findOne({ _id: user2._id });
+            })
+            .then(_user => {
+              expect(_user.friended).to.include(user._id);
+            });
+        });
 
-    describe('PUT /suggested/:id', function () {
+      });
+    });
+  });
+
+  describe('/ignore', function () {
+    describe('PUT /ignore/:id', function () {
+      it('no access if no token', function () {
+        return chai.request(app)
+          .get(`/ignore/${user._id}`)
+          .then(res => {
+            expect(res).to.have.status(401);
+          });
+      });
+      it('no access if invalid token', function () {
+        const auth = jwt.sign(
+          {
+            username: user.username,
+            id: user._id
+          },
+          'AISJDOIASJHDIOSA',
+          {
+            algorithm: 'HS256',
+            expiresIn: '7d'
+          }
+        );
+        return chai
+          .request(app)
+          .get(`/ignore/${user._id}`)
+          .set('Authorization', `Bearer ${auth}`)
+          .then((res) => {
+            expect(res).to.have.status(401);
+          });
+      });
+      it('Should add ignored user to user', function () {
+        const body = {
+          ignoredUser: user2._id
+        };
+        return chai
+          .request(app)
+          .put(`/ignore/${user._id}`)
+          .set('Authorization', `Bearer ${auth}`)
+          .send(body)
+          .then(res => {
+            expect(res).to.have.status(204);
+            return User.findOne({ _id: user._id });
+          })
+          .then(_user => {
+            expect(_user.ignored).include(user2._id);
+          });
+      });
+    });
+  });
+  describe('/messages', function () {
+    describe('GET/suggested/:id', function () {
+      it('no access if no token', function () {
+        return chai.request(app)
+          .get(`/messages/suggested/${user._id}`)
+          .then(res => {
+            expect(res).to.have.status(401);
+          });
+      });
+      it('no access if invalid token', function () {
+        const auth = jwt.sign(
+          {
+            username: user.username,
+            id: user._id
+          },
+          'AISJDOIASJHDIOSA',
+          {
+            algorithm: 'HS256',
+            expiresIn: '7d'
+          }
+        );
+        return chai
+          .request(app)
+          .get(`/messages/suggested/${user._id}`)
+          .set('Authorization', `Bearer ${auth}`)
+          .then((res) => {
+            expect(res).to.have.status(401);
+          });
+      });
+      it('should give an error when user is not in that chat', function () {
+        const token = jwt.sign(
+          {
+            user: {
+              username: user.username,
+              email: user.email,
+              id: '000000000000000000000111'
+            },
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: user.username,
+            expiresIn: '7d'
+          }
+        );
+        return chai
+          .request(app)
+          .get(`/api/messages/${chat._id}`)
+          .set('Authorization', `Bearer ${token}`)
+          .then((res) => {
+            expect(res).to.have.status(401);
+            expect(res.body.message).to.equal('You do not have access to this conversation');
+          });
+      });
+    });
+    describe('PUT/suggested/:id', function () {
+
+    });
+    describe('GET/:id', function () {
+      it('no access if no token', function () {
+        return chai.request(app)
+          .get(`/messages/${user._id}`)
+          .then(res => {
+            expect(res).to.have.status(401);
+          });
+      });
+      it('no access if invalid token', function () {
+        const auth = jwt.sign(
+          {
+            username: user.username,
+            id: user._id
+          },
+          'AISJDOIASJHDIOSA',
+          {
+            algorithm: 'HS256',
+            expiresIn: '7d'
+          }
+        );
+        return chai
+          .request(app)
+          .get(`/messages/${user._id}`)
+          .set('Authorization', `Bearer ${auth}`)
+          .then((res) => {
+            expect(res).to.have.status(401);
+          });
+      });
+    });
+    describe('GET/:id', function () {
     });
   });
 });
