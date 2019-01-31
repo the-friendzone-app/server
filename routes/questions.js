@@ -39,7 +39,7 @@ router.get('/user-answered/:questionId/:answer', jwtAuth, (req, res, next) => {
   Quiz.findOne({ _id: req.params.questionId })
     .then((result) => {
       if (req.params.answer === result.trapdoor) {
-        return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true, 'password': 'generator-chipanzee-party-arms' } }, { new: true })
+        return User.findOneAndUpdate({ _id: req.user._id }, { '$set': { 'marked': true} }, { new: true })
           .then(user => {
             user.introQuizQuestions.push({
               questionID: req.params.questionId,
