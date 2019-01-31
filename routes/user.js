@@ -3,19 +3,13 @@
 const express = require('express');
 const faker = require('faker');
 const User = require('../models/user');
-
 const router = express.Router();
-
-
 
 function validateNewUser(req, res, next) {
   const { email, username, password } = req.body;
 
   let err;
-
   if (!email) {
-
-  if(!email){
 
     err = new Error('Username is required');
     err.location = 'username';
@@ -68,11 +62,11 @@ router.post('/', validateNewUser, (req, res, next) => {
     .then(_hashedPassword => {
       hashedPassword = _hashedPassword;
 
- 
+
       hashedUsername = User.hashUsername();
 
       verificationCode = User.createVerificationCode();
-    
+
 
       return { hashedPassword, hashedUsername, verificationCode };
     })
@@ -115,10 +109,4 @@ router.get('/:id', (req, res) => {
   );
 });
 
-
-
 module.exports = router;
-
-
-
-
