@@ -8,6 +8,7 @@ const users = [
       selfType: 'both',
       preferenceType: 'both'
     },
+    'email': 'samwise@gmail.com',
     'verified': false,
     'introQuizCompleted': false,
     'hashedUsername': 'Sophisticated-Crumpet51261',
@@ -33,6 +34,7 @@ const users = [
       selfType: 'talker',
       preferenceType: 'both'
     },
+    'email': 'frodo@gmail.com',
     'verified': false,
     'introQuizCompleted': false,
     'hashedUsername': 'Tiny-Socks70004',
@@ -64,6 +66,7 @@ const users = [
       preferenceType: 'both'
     },
     'verified': false,
+    'email': 'gollum@gmail.com',
     'introQuizCompleted': false,
     'hashedUsername': 'Clever-Dolphin84559',
     'userVerificationCode': '9sdsadsa',
