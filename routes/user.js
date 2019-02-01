@@ -64,7 +64,7 @@ router.post('/', validateNewUser, (req, res, next) => {
   // username = username.trim();
 
   const { email, username, password, selfType, preferenceType } = req.body;
-  console.log(req.body)
+  // console.log(req.body)
   let hashedPassword, hashedUsername, verificationCode;
   return User.hashPassword(password)
     .then(_hashedPassword => {
@@ -108,9 +108,9 @@ router.post('/', validateNewUser, (req, res, next) => {
     });
 });
 
-router.get('/info', jwtAuth, (req,res)=>{
-  User.findOne({_id:req.user._id})
-    .then((user)=>res.send(user));
+router.get('/info', jwtAuth, (req, res) => {
+  User.findOne({ _id: req.user._id })
+    .then((user) => res.send(user));
 });
 router.get('/:id', (req, res) => {
   let { id } = req.params;
