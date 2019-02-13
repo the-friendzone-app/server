@@ -32,7 +32,25 @@ With some many ways to connect, come join the Friend Zone today!
 - Jail-time (disciplinary system for users that don't follow community guidelines)
 - Patreon
 - Discord Channel
+## Tech Stack
+### Client
+- React - The web framework used
+- Redux
+- Socket.io - Websocket
+- Google Geolocation API - Location API
+- Eventbrite API - Event API
+- Jest - Testing
+- Enzyme - Testing
 
+### Server
+- Node
+- Express - Web application framework
+- MongoDB - Database
+- Mongoose - Data modeling
+- Passport - Authentication
+- JWT - Authentication
+- Socket.io - Websocket
+- Mocha/Chai - Testing
 ## Development Team
 Team HAMLOGS!
 - Project Manager: Alex Crowell [Github](https://github.com/talexcrowell)
